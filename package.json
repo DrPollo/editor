@@ -1,0 +1,23 @@
+{
+  "name": "inputmap",
+  "version": "1.0.0",
+  "description": "web map to input enhaced spatial location in web applications",
+  "main": "index.js",
+  "scripts": {
+    "test": "serve ./test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.dev.di.unito.it:firstlife/inputmap.git"
+  },
+  "keywords": [
+    "leafletjs"
+  ],
+  "author": "Alessio Antonini, Luigi Sanasi",
+  "license": "MIT",
+  "dependencies": {
+    "leaflet": "^1.0.3",
+    "leaflet.vectorgrid": "^1.2.0",
+    "serve": "^5.0.3"
+  }
+}
