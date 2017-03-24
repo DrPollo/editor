@@ -4,7 +4,7 @@
   "description": "web map to input enhaced spatial location in web applications",
   "main": "index.js",
   "scripts": {
-    "test": "serve ./test"
+    "test": "serve ./"
   },
   "repository": {
     "type": "git",
