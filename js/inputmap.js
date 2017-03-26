@@ -240,18 +240,18 @@ var areaStyling = function () {
     return {
         weight: 1,
         fillColor: '#3bb50a',
-        color: '#3bb50a',
-        fillOpacity: 0.2,
-        opacity: 0.4
+        color: '#fff',
+        fillOpacity: 1,
+        opacity: 1
     }
 }
 var areaserverConfig = {
-    rendererFactory: L.canvas.tile,
+    rendererFactory: L.svg.tile,
     attribution:false,
     vectorTileLayerStyles: areaStyling,
-    token: 'pk.eyJ1IjoiaXZhbnNhbmNoZXoiLCJhIjoiY2l6ZTJmd3FnMDA0dzMzbzFtaW10cXh2MSJ9.VsWCS9-EAX4_4W1K-nXnsA'
+    // token: 'pk.eyJ1IjoiaXZhbnNhbmNoZXoiLCJhIjoiY2l6ZTJmd3FnMDA0dzMzbzFtaW10cXh2MSJ9.VsWCS9-EAX4_4W1K-nXnsA'
 };
-var areaserverUrl = "http://fldev.di.unito.it:3095/tile/z/{z}/x/{x}/y/{y}";
+var areaserverUrl = "http://fldev.di.unito.it:3095/tile/{z}/{x}/{y}";
 L.vectorGrid.protobuf(areaserverUrl, areaserverConfig).addTo(mymap);
 // hook to click event
 mymap.on('click', onMapClick);
