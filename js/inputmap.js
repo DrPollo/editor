@@ -37,166 +37,144 @@ var contrast = params.get('contrast');
 var mymap = L.map('inputmap').setView([lat, lon], zoom );
 // map setup
 // https://api.mapbox.com/styles/v1/drp0ll0/cizl1thgs000u2ro17h1cv4y2/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZHJwMGxsMCIsImEiOiI4bUpPVm9JIn0.NCRmAUzSfQ_fT3A86d9RvQ
-L.tileLayer('https://api.mapbox.com/styles/v1/drp0ll0/cizl1thgs000u2ro17h1cv4y2/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZHJwMGxsMCIsImEiOiI4bUpPVm9JIn0.NCRmAUzSfQ_fT3A86d9RvQ', {
+L.tileLayer('https://api.mapbox.com/styles/v1/drp0ll0/cj0tausco00tb2rt87i5c8pi0/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZHJwMGxsMCIsImEiOiI4bUpPVm9JIn0.NCRmAUzSfQ_fT3A86d9RvQ', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
     maxZoom: 20,
     // id: 'your.mapbox.project.id',
     // accessToken: 'pk.eyJ1IjoiZHJwMGxsMCIsImEiOiI4bUpPVm9JIn0.NCRmAUzSfQ_fT3A86d9RvQ'
 }).addTo(mymap);
 
+
+//reset stili
+var myStyle = {
+    color: 'transparent',
+    weight:0,
+    fillColor: 'transparent'
+};
+L.Path.mergeOptions(myStyle);
+L.Polyline.mergeOptions(myStyle);
+L.Polygon.mergeOptions(myStyle);
+L.Rectangle.mergeOptions(myStyle);
+L.Circle.mergeOptions(myStyle);
+L.CircleMarker.mergeOptions(myStyle);
+
+
+
 // vectorGrid
-var vectormapUrl = "https://{s}.tiles.mapbox.com/v4/mapbox.mapbox-streets-v6/{z}/{x}/{y}.vector.pbf?access_token={token}";
+var vectormapUrl = "http://tiles.fldev.di.unito.it/tile/{z}/{x}/{y}";
+// var vectormapUrl = "http://{s}.tiles.mapbox.com/v4/mapbox.mapbox-streets-v6/{z}/{x}/{y}.vector.pbf?access_token={token}";
 var vectorMapStyling = {
-    water: {
+    interactive:{
         fill: true,
         weight: 1,
         fillColor: '#06cccc',
         color: '#06cccc',
         fillOpacity: 0.2,
-        opacity: 0.4,
-    },
-    admin: {
-        weight: 1,
-        fillColor: 'pink',
-        color: 'pink',
-        fillOpacity: 0.2,
         opacity: 0.4
     },
-    waterway: {
-        weight: 1,
-        fillColor: '#2375e0',
-        color: '#2375e0',
-        fillOpacity: 0.2,
-        opacity: 0.4
+    water: function(p,z){
+        return  (false) ? {
+            fill: true,
+            weight: 1,
+            fillColor: '#06cccc',
+            color: '#06cccc',
+            fillOpacity: 0.2,
+            opacity: 0.4,
+        } : {}
     },
-    landcover: {
-        fill: true,
-        weight: 1,
-        fillColor: '#53e033',
-        color: '#53e033',
-        fillOpacity: 0.2,
-        opacity: 0.4,
+    admin: function(p,z){
+        // (z < 14) ? console.log('admin') : '';
+        return (z < 14) ? {
+            weight: 2,
+            // fillColor: 'pink',
+            color: 'blue',
+            // fillOpacity: 0.2,
+            opacity: 1
+        } : {}
     },
-    landuse: {
-        fill: true,
-        weight: 1,
-        fillColor: '#e5b404',
-        color: '#e5b404',
-        fillOpacity: 0.2,
-        opacity: 0.4
+    waterway: function(p,z){
+        // (z > 9) ? console.log('waterway') : '';
+        return  (z > 9) ? {
+            weight: 1,
+            fillColor: '#2375e0',
+            color: '#2375e0',
+            fillOpacity: 0.2,
+            opacity: 0.4
+        } : {}
     },
-    park: {
-        fill: true,
-        weight: 1,
-        fillColor: '#84ea5b',
-        color: '#84ea5b',
-        fillOpacity: 0.2,
-        opacity: 0.4
+    park: function(p,z){
+        // (z > 14 && z < 20) ? console.log('park') : '';
+        return (z > 14 && z < 20) ? {
+            fill: true,
+            weight: 1,
+            fillColor: 'green',
+            color: 'green',
+            fillOpacity: 0.2,
+            opacity: 0.4
+        } : {}
     },
-    boundary: {
-        weight: 1,
-        fillColor: '#c545d3',
-        color: '#c545d3',
-        fillOpacity: 0.2,
-        opacity: 0.4
+    boundary: function(p,z){
+        (z < 10) ? console.log('boundary') : '';
+        return (z < 10) ? {
+            weight: 1,
+            fillColor: '#c545d3',
+            color: '#c545d3',
+            fillOpacity: 0.2,
+            opacity: 0.4
+        } : {}
     },
-    aeroway: {
-        weight: 1,
-        fillColor: '#51aeb5',
-        color: '#51aeb5',
-        fillOpacity: 0.2,
-        opacity: 0.4
+    road: function(p,z){
+        // (z > 14) ? console.log('road') : '';
+        return (z > 14) ? {	// mapbox & mapzen only
+            weight: 4,
+            fillColor: '#3399ff',
+            color: '#3399ff',
+            fillOpacity: 0.5,
+            opacity: 0.85
+        } : {}
     },
-    road: {	// mapbox & mapzen only
-        weight: 1,
-        fillColor: '#f2b648',
-        color: '#f2b648',
-        fillOpacity: 0.2,
-        opacity: 0.4
-    },
-    tunnel: {	// mapbox only
-        weight: 0.5,
-        fillColor: '#f2b648',
-        color: '#f2b648',
-        fillOpacity: 0.2,
-        opacity: 0.4,
+    tunnel: function(p,z){
+        return (z > 14) ? {	// mapbox only
+            weight: 0.5,
+            fillColor: 'blue',
+            color: 'blue',
+            fillOpacity: 0.5,
+            opacity: 1
 // 					dashArray: [4, 4]
+        }:{}
     },
-    bridge: {	// mapbox only
-        weight: 0.5,
-        fillColor: '#f2b648',
-        color: '#f2b648',
-        fillOpacity: 0.2,
-        opacity: 0.4,
+    bridge: function(p,z){
+        return (z > 14) ? {	// mapbox only
+            weight: 0.5,
+            fillColor: 'blue',
+            color: 'blue',
+            fillOpacity: 0.5,
+            opacity: 1,
 // 					dashArray: [4, 4]
+        } :{}
     },
-    transportation: {	// openmaptiles only
-        weight: 0.5,
-        fillColor: '#f2b648',
-        color: '#f2b648',
-        fillOpacity: 0.2,
-        opacity: 0.4,
-// 					dashArray: [4, 4]
+    building: function(p,z){
+        // (z > 14 && z < 20) ? console.log('building') : '';
+        return (z > 14 && z < 20) ? {
+            fill: true,
+            weight: 1,
+            fillColor: 'orange',
+            color: 'orange',
+            fillOpacity: 0.85,
+            opacity: 1
+        } : {}
     },
-    transit: {	// mapzen only
-        weight: 0.5,
-        fillColor: '#f2b648',
-        color: '#f2b648',
-        fillOpacity: 0.2,
-        opacity: 0.4,
-// 					dashArray: [4, 4]
+    place: function(p,z){
+        return (false) ? {
+            weight: 1,
+            fillColor: '#f20e93',
+            color: '#f20e93',
+            fillOpacity: 0.2,
+            opacity: 0.4
+        }:{}
     },
-    building: {
-        fill: true,
-        weight: 1,
-        fillColor: '#2b2b2b',
-        color: '#2b2b2b',
-        fillOpacity: 0.2,
-        opacity: 0.4
-    },
-    water_name: {
-        weight: 1,
-        fillColor: '#022c5b',
-        color: '#022c5b',
-        fillOpacity: 0.2,
-        opacity: 0.4
-    },
-    transportation_name: {
-        weight: 1,
-        fillColor: '#bc6b38',
-        color: '#bc6b38',
-        fillOpacity: 0.2,
-        opacity: 0.4
-    },
-    place: {
-        weight: 1,
-        fillColor: '#f20e93',
-        color: '#f20e93',
-        fillOpacity: 0.2,
-        opacity: 0.4
-    },
-    housenumber: {
-        weight: 1,
-        fillColor: '#ef4c8b',
-        color: '#ef4c8b',
-        fillOpacity: 0.2,
-        opacity: 0.4
-    },
-    poi: {
-        weight: 1,
-        fillColor: '#3bb50a',
-        color: '#3bb50a',
-        fillOpacity: 0.2,
-        opacity: 0.4
-    },
-    earth: {	// mapzen only
-        fill: true,
-        weight: 1,
-        fillColor: '#c0c0c0',
-        color: '#c0c0c0',
-        fillOpacity: 0.2,
-        opacity: 0.4
-    },
+    barrier_line: {},
+    contour: {},
     // Do not symbolize some stuff for mapbox
     country_label: [],
     marine_label: [],
@@ -229,38 +207,49 @@ var vectormapConfig = {
     rendererFactory: L.canvas.tile,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://www.mapbox.com/about/maps/">MapBox</a>',
     vectorTileLayerStyles: vectorMapStyling,
-    token: 'pk.eyJ1IjoiaXZhbnNhbmNoZXoiLCJhIjoiY2l6ZTJmd3FnMDA0dzMzbzFtaW10cXh2MSJ9.VsWCS9-EAX4_4W1K-nXnsA'
+    token: 'pk.eyJ1IjoiaXZhbnNhbmNoZXoiLCJhIjoiY2l6ZTJmd3FnMDA0dzMzbzFtaW10cXh2MSJ9.VsWCS9-EAX4_4W1K-nXnsA',
+    interactive: true
 };
-// L.vectorGrid.protobuf(vectormapUrl, vectormapConfig).addTo(mymap);
-
-
-
-
-var areaStyling = function () {
-    return {
-        weight: 1,
-        fillColor: '#3bb50a',
-        color: '#fff',
-        fillOpacity: 1,
-        opacity: 1
-    }
+function whenClicked(e) {
+    // e = event
+    console.log(e);
+    // You can make your ajax call declaration here
+    //$.ajax(...
 }
-var areaserverConfig = {
-    rendererFactory: L.svg.tile,
-    attribution:false,
-    vectorTileLayerStyles: areaStyling,
-    // token: 'pk.eyJ1IjoiaXZhbnNhbmNoZXoiLCJhIjoiY2l6ZTJmd3FnMDA0dzMzbzFtaW10cXh2MSJ9.VsWCS9-EAX4_4W1K-nXnsA'
-};
-var areaserverUrl = "http://fldev.di.unito.it:3095/tile/{z}/{x}/{y}";
-L.vectorGrid.protobuf(areaserverUrl, areaserverConfig).addTo(mymap);
+L.vectorGrid.protobuf(vectormapUrl, vectormapConfig).on('click', onMapClick).addTo(mymap);
+
+
+
+// in attesa di tile server che funziona
+// var areaStyling = function () {
+//     return {
+//         weight: 1,
+//         fillColor: '#3bb50a',
+//         color: '#fff',
+//         fillOpacity: 1,
+//         opacity: 1
+//     }
+// }
+// var areaserverConfig = {
+//     rendererFactory: L.svg.tile,
+//     attribution:false,
+//     vectorTileLayerStyles: areaStyling,
+//     // token: 'pk.eyJ1IjoiaXZhbnNhbmNoZXoiLCJhIjoiY2l6ZTJmd3FnMDA0dzMzbzFtaW10cXh2MSJ9.VsWCS9-EAX4_4W1K-nXnsA'
+// };
+// var areaserverUrl = "http://fldev.di.unito.it:3095/tile/{z}/{x}/{y}";
+// L.vectorGrid.protobuf(areaserverUrl, areaserverConfig).addTo(mymap);
+
+
+
+
 // hook to click event
-mymap.on('click', onMapClick);
+// mymap.on('click', onMapClick);
 
 
 // handler of the click event
 function onMapClick(e) {
     // lat, lon, zoom_level
-    var params = e.latlng;
+    var params = Object.assign(e.latlng,e.layer.properties);
     // if empty event such as return key event
     if(!params)
         return
