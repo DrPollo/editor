@@ -27,7 +27,7 @@
     <p>
         InputMap embed in iframe tag
     </p>
-    <iframe title="input a location" width="600" height="600" src="src/index.html?contrast=true&domain=http://localhost:5000&lat=45.070312&lon=7.686856&zoom=12"></iframe>
+    <iframe title="input a location" width="600" height="600" src="src/index.html?contrast=true&domain=http://inputmap.fldev.di.unito.it/&lat=45.070312&lon=7.686856&zoom=12"></iframe>
     <p></p>
     <p>
     <div>
@@ -39,11 +39,17 @@
     <div>
         Zoom: <span id="zoom"></span>
     </div>
+    <div>
+        Id: <span id="id"></span>
+    </div>
+    <div>
+        Name: <span id="name"></span>
+    </div>
     </p>
 </div>
 </body>
 <script>
-    var iframeDomain = "http://localhost:5000"
+    var iframeDomain = "http://inputmap.fldev.di.unito.it/"
     window.addEventListener( "message",
         function (e) {
             if(e.origin !== iframeDomain){ return; }
@@ -51,6 +57,8 @@
             document.getElementById("lat").innerHTML = e.data.lat;
             document.getElementById("lon").innerHTML = e.data.lng;
             document.getElementById("zoom").innerHTML = e.data.zoom_level;
+            document.getElementById("id").innerHTML = e.data.id;
+            document.getElementById("name").innerHTML = e.data.name;
         },
         false);
 </script>
