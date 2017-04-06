@@ -27,7 +27,7 @@
     <p>
         InputMap in embed in an iframe tag
     </p>
-    <iframe title="input a location" width="600" height="600" src="src/index.html?domain=http://localhost:5000&lat=45.070312&lon=7.686856&zoom=12&contrast=true"></iframe>
+    <iframe title="input a location" width="600" height="600" src="src/index.html?domain=http://localhost:8080&lat=45.070312&lon=7.686856&zoom=12&contrast=false"></iframe>
     <p></p>
     <p>
     <h4>Returned object to the hosting window:</h4>
@@ -50,7 +50,7 @@
 </div>
 </body>
 <script>
-    var iframeDomain = "http://localhost:5000"
+    var iframeDomain = "http://localhost:8080"
     window.addEventListener( "message",
         function (e) {
             if(e.origin !== iframeDomain){ return; }

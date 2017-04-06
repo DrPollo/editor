@@ -53,7 +53,7 @@ The optional params are:
 1. lat: {float} initial latitude
 2. lon: {float} initial longiture
 3. zoom: {1-20} initial zoom level (1 is world level, 20 indoor level)
-4. *contrast: {true|false} enable high contrast map (default false)
+4. contrast: {true|false} enable high contrast map (default false)
 5. *lan: {ISO 639-1 codes} language (default it) [List of ISO 639-1 codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
 6. *mobile: {true|false|auto} mobile mode of input (default auto)
 
