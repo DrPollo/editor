@@ -7,16 +7,21 @@
 var zoom = 13;
 var lat = 45.070312;
 var lon = 7.686856;
-
+var baselayer = 'https://api.mapbox.com/styles/v1/drp0ll0/cj0tausco00tb2rt87i5c8pi0/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZHJwMGxsMCIsImEiOiI4bUpPVm9JIn0.NCRmAUzSfQ_fT3A86d9RvQ';
+var contrastlayer = 'https://api.mapbox.com/styles/v1/drp0ll0/cj167l5m800452rqsb9y2ijuq/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZHJwMGxsMCIsImEiOiI4bUpPVm9JIn0.NCRmAUzSfQ_fT3A86d9RvQ';
+var contrast = false;
 
 // recover search params
 var params = (new URL(location)).searchParams;
-console.debug('check params',params.get('contrast'));
+
+
+
 
 // override location from get params
 lat = params.get('lat') ? params.get('lat') : lat;
 lon = params.get('lon') ? params.get('lon') : lon;
 zoom = params.get('zoom') ? params.get('zoom') : zoom;
+contrast = params.get('contrast') === 'true' ;
 
 // recover domain param (used for security reasons)
 var domain = params.get('domain');
@@ -24,39 +29,36 @@ var domain = params.get('domain');
 if(!domain){
     console.error('missing mandatory param: "domain"');
 }
-
-/*
- * set other params
- * 1) contrast: selects the highcontrast tile layer
- */
-var contrast = params.get('contrast');
+//
+// console.log('check params:');
 
 
-
+// attribution: '<a href="http://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors | <a href="http://mapbox.com" target="_blank">Mapbox</a>',
 // definition of the map
-var mymap = L.map('inputmap').setView([lat, lon], zoom );
+
 // map setup
-// https://api.mapbox.com/styles/v1/drp0ll0/cizl1thgs000u2ro17h1cv4y2/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZHJwMGxsMCIsImEiOiI4bUpPVm9JIn0.NCRmAUzSfQ_fT3A86d9RvQ
-L.tileLayer('https://api.mapbox.com/styles/v1/drp0ll0/cj0tausco00tb2rt87i5c8pi0/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZHJwMGxsMCIsImEiOiI4bUpPVm9JIn0.NCRmAUzSfQ_fT3A86d9RvQ', {
-    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-    maxZoom: 20,
-    // id: 'your.mapbox.project.id',
-    // accessToken: 'pk.eyJ1IjoiZHJwMGxsMCIsImEiOiI4bUpPVm9JIn0.NCRmAUzSfQ_fT3A86d9RvQ'
-}).addTo(mymap);
+var layers = {
+    base: L.tileLayer(baselayer, {maxZoom: 20}),
+    contrast : L.tileLayer(contrastlayer, {maxZoom: 20})
+};
 
 
-//reset stili
-var myStyle = {
+console.log('select base layer:',contrast,contrast ? 'contrast': 'base', "test",params.get('contrast'));
+var mymap = L.map('inputmap').setView([lat, lon], zoom );
+layers[contrast ? 'contrast': 'base'].addTo(mymap);
+
+//reset stiles
+var resetStyle = {
     color: 'transparent',
     weight:0,
     fillColor: 'transparent'
 };
-L.Path.mergeOptions(myStyle);
-L.Polyline.mergeOptions(myStyle);
-L.Polygon.mergeOptions(myStyle);
-L.Rectangle.mergeOptions(myStyle);
-L.Circle.mergeOptions(myStyle);
-L.CircleMarker.mergeOptions(myStyle);
+L.Path.mergeOptions(resetStyle);
+L.Polyline.mergeOptions(resetStyle);
+L.Polygon.mergeOptions(resetStyle);
+L.Rectangle.mergeOptions(resetStyle);
+L.Circle.mergeOptions(resetStyle);
+L.CircleMarker.mergeOptions(resetStyle);
 
 
 
@@ -65,134 +67,13 @@ var vectormapUrl = "http://localhost:3095/tile/{z}/{x}/{y}";
 // var vectormapUrl = "http://{s}.tiles.mapbox.com/v4/mapbox.mapbox-streets-v6/{z}/{x}/{y}.vector.pbf?access_token={token}";
 var vectorMapStyling = {
     interactive:{
-        fill: true,
-        weight: 1,
+        fill: false,
+        weight: 0,
         fillColor: '#06cccc',
         color: '#06cccc',
         fillOpacity: 0.2,
         opacity: 0.4
-    },
-    water: function(p,z){
-        return  (false) ? {
-            fill: true,
-            weight: 1,
-            fillColor: '#06cccc',
-            color: '#06cccc',
-            fillOpacity: 0.2,
-            opacity: 0.4,
-        } : {}
-    },
-    admin: function(p,z){
-        // (z < 14) ? console.log('admin') : '';
-        return (z < 14) ? {
-            weight: 2,
-            // fillColor: 'pink',
-            color: 'blue',
-            // fillOpacity: 0.2,
-            opacity: 1
-        } : {}
-    },
-    waterway: function(p,z){
-        // (z > 9) ? console.log('waterway') : '';
-        return  (z > 9) ? {
-            weight: 1,
-            fillColor: '#2375e0',
-            color: '#2375e0',
-            fillOpacity: 0.2,
-            opacity: 0.4
-        } : {}
-    },
-    park: function(p,z){
-        // (z > 14 && z < 20) ? console.log('park') : '';
-        return (z > 14 && z < 20) ? {
-            fill: true,
-            weight: 1,
-            fillColor: 'green',
-            color: 'green',
-            fillOpacity: 0.2,
-            opacity: 0.4
-        } : {}
-    },
-    boundary: function(p,z){
-        (z < 10) ? console.log('boundary') : '';
-        return (z < 10) ? {
-            weight: 1,
-            fillColor: '#c545d3',
-            color: '#c545d3',
-            fillOpacity: 0.2,
-            opacity: 0.4
-        } : {}
-    },
-    road: function(p,z){
-        // (z > 14) ? console.log('road') : '';
-        return (z > 14) ? {	// mapbox & mapzen only
-            weight: 4,
-            fillColor: '#3399ff',
-            color: '#3399ff',
-            fillOpacity: 0.5,
-            opacity: 0.85
-        } : {}
-    },
-    tunnel: function(p,z){
-        return (z > 14) ? {	// mapbox only
-            weight: 0.5,
-            fillColor: 'blue',
-            color: 'blue',
-            fillOpacity: 0.5,
-            opacity: 1
-// 					dashArray: [4, 4]
-        }:{}
-    },
-    bridge: function(p,z){
-        return (z > 14) ? {	// mapbox only
-            weight: 0.5,
-            fillColor: 'blue',
-            color: 'blue',
-            fillOpacity: 0.5,
-            opacity: 1,
-// 					dashArray: [4, 4]
-        } :{}
-    },
-    building: function(p,z){
-        // (z > 14 && z < 20) ? console.log('building') : '';
-        return (z > 14 && z < 20) ? {
-            fill: true,
-            weight: 1,
-            fillColor: 'orange',
-            color: 'orange',
-            fillOpacity: 0.85,
-            opacity: 1
-        } : {}
-    },
-    place: function(p,z){
-        return (false) ? {
-            weight: 1,
-            fillColor: '#f20e93',
-            color: '#f20e93',
-            fillOpacity: 0.2,
-            opacity: 0.4
-        }:{}
-    },
-    barrier_line: {},
-    contour: {},
-    // Do not symbolize some stuff for mapbox
-    country_label: [],
-    marine_label: [],
-    state_label: [],
-    place_label: [],
-    waterway_label: [],
-    poi_label: [],
-    road_label: [],
-    housenum_label: [],
-    // Do not symbolize some stuff for openmaptiles
-    country_name: [],
-    marine_name: [],
-    state_name: [],
-    place_name: [],
-    waterway_name: [],
-    poi_name: [],
-    road_name: [],
-    housenum_name: [],
+    }
 };
 // Monkey-patch some properties for mapzen layer names, because
 // instead of "building" the data layer is called "buildings" and so on
@@ -205,7 +86,7 @@ vectorMapStyling.roads      = vectorMapStyling.road;
 // config del layer
 var vectormapConfig = {
     rendererFactory: L.canvas.tile,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://www.mapbox.com/about/maps/">MapBox</a>',
+    attribution: false,
     vectorTileLayerStyles: vectorMapStyling,
     token: 'pk.eyJ1IjoiaXZhbnNhbmNoZXoiLCJhIjoiY2l6ZTJmd3FnMDA0dzMzbzFtaW10cXh2MSJ9.VsWCS9-EAX4_4W1K-nXnsA',
     interactive: true
@@ -216,34 +97,10 @@ function whenClicked(e) {
     // You can make your ajax call declaration here
     //$.ajax(...
 }
-L.vectorGrid.protobuf(vectormapUrl, vectormapConfig).on('click', onMapClick).addTo(mymap);
+L.vectorGrid.protobuf(vectormapUrl, vectormapConfig)
+    .on('click', onMapClick) // add listner to vectorGrid layer
+    .addTo(mymap); // add vectorGrid layer to map
 
-
-
-// in attesa di tile server che funziona
-// var areaStyling = function () {
-//     return {
-//         weight: 1,
-//         fillColor: '#3bb50a',
-//         color: '#fff',
-//         fillOpacity: 1,
-//         opacity: 1
-//     }
-// }
-// var areaserverConfig = {
-//     rendererFactory: L.svg.tile,
-//     attribution:false,
-//     vectorTileLayerStyles: areaStyling,
-//     // token: 'pk.eyJ1IjoiaXZhbnNhbmNoZXoiLCJhIjoiY2l6ZTJmd3FnMDA0dzMzbzFtaW10cXh2MSJ9.VsWCS9-EAX4_4W1K-nXnsA'
-// };
-// var areaserverUrl = "http://fldev.di.unito.it:3095/tile/{z}/{x}/{y}";
-// L.vectorGrid.protobuf(areaserverUrl, areaserverConfig).addTo(mymap);
-
-
-
-
-// hook to click event
-// mymap.on('click', onMapClick);
 
 
 // handler of the click event
