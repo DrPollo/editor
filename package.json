@@ -4,7 +4,8 @@
   "description": "web map to input enhaced spatial location in web applications",
   "main": "index.js",
   "scripts": {
-    "test": "serve ./"
+    "test": "serve -p 8080",
+    "start": "serve -p 8080"
   },
   "repository": {
     "type": "git",
@@ -16,8 +17,10 @@
   "author": "Alessio Antonini, Luigi Sanasi",
   "license": "MIT",
   "dependencies": {
+    "express": "^4.15.2",
     "leaflet": "^1.0.3",
     "leaflet.vectorgrid": "^1.2.0",
+    "path": "^0.12.7",
     "serve": "^5.0.3"
   }
 }
