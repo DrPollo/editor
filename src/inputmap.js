@@ -11,7 +11,7 @@ var htmlIcon = '<div class="pin"></div><div class="pulse"></div>';
 var pinIcon = L.divIcon({className: 'pointer',html:htmlIcon});
 
 // vectorGrid
-var vectormapUrl = "http://tiles.fldev.di.unito.it/tile/{z}/{x}/{y}";
+var vectormapUrl = "//tiles.fldev.di.unito.it/tile/{z}/{x}/{y}";
 
 // recover search params
 var params = (new URL(location)).searchParams;
