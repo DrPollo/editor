@@ -12,9 +12,9 @@ InputMap is meant to be used in an iframe tag, it can be controlled via params:
 
 InputMap returns an object to the hosting window extending the latitude and longitude params from the leaflet "click" event.
 
-You can find a test page for InputMap at [http://inputmap.fldev.di.unito.it](http://inputmap.fldev.di.unito.it)
+[![InputMap test](./screenshot.png)](http://inputmap.fldev.di.unito.it)
 
-<iframe title="InputMap test" width="800" height="1000" src="http://inputmap.fldev.di.unito.it" frameborder="0"></iframe>
+You can find this test page for InputMap at [http://inputmap.fldev.di.unito.it](http://inputmap.fldev.di.unito.it)
 
 Example of object returned to the host window:
 ```

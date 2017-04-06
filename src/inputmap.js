@@ -61,7 +61,7 @@ L.CircleMarker.mergeOptions(myStyle);
 
 
 // vectorGrid
-var vectormapUrl = "http://tiles.fldev.di.unito.it/tile/{z}/{x}/{y}";
+var vectormapUrl = "http://localhost:3095/tile/{z}/{x}/{y}";
 // var vectormapUrl = "http://{s}.tiles.mapbox.com/v4/mapbox.mapbox-streets-v6/{z}/{x}/{y}.vector.pbf?access_token={token}";
 var vectorMapStyling = {
     interactive:{
