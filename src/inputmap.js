@@ -10,7 +10,8 @@ var contrastlayer = 'https://api.mapbox.com/styles/v1/drp0ll0/cj167l5m800452rqsb
 var htmlIcon = '<div class="pin"></div><div class="pulse"></div>';
 var pinIcon = L.divIcon({className: 'pointer',html:htmlIcon});
 
-
+// vectorGrid
+var vectormapUrl = "http://tiles.fldev.di.unito.it/tile/{z}/{x}/{y}";
 
 // recover search params
 var params = (new URL(location)).searchParams;
@@ -79,8 +80,7 @@ L.CircleMarker.mergeOptions(resetStyle);
 
 
 
-// vectorGrid
-var vectormapUrl = "http://localhost:3095/tile/{z}/{x}/{y}";
+
 // var vectormapUrl = "http://{s}.tiles.mapbox.com/v4/mapbox.mapbox-streets-v6/{z}/{x}/{y}.vector.pbf?access_token={token}";
 var vectorMapStyling = {
     interactive:{
