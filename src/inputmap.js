@@ -8,10 +8,11 @@ var baselayer = 'https://api.mapbox.com/styles/v1/drp0ll0/cj0tausco00tb2rt87i5c8
 var contrastlayer = 'https://api.mapbox.com/styles/v1/drp0ll0/cj167l5m800452rqsb9y2ijuq/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZHJwMGxsMCIsImEiOiI4bUpPVm9JIn0.NCRmAUzSfQ_fT3A86d9RvQ';
 
 var htmlIcon = '<div class="pin"></div><div class="pulse"></div>';
-var pinIcon = L.divIcon({className: 'pointer',html:htmlIcon});
+var pinIcon = L.divIcon({className: 'pointer',html:htmlIcon, iconSize:[30,30],iconAnchor:[15,15]});
 
 // vectorGrid
-var vectormapUrl = "//tiles.fldev.di.unito.it/tile/{z}/{x}/{y}";
+var vectormapUrl = "//localhost:3095/tile/{z}/{x}/{y}";
+// var vectormapUrl = "//tiles.fldev.di.unito.it/tile/{z}/{x}/{y}";
 
 // recover search params
 var params = (new URL(location)).searchParams;
@@ -85,11 +86,11 @@ L.CircleMarker.mergeOptions(resetStyle);
 var vectorMapStyling = {
     interactive:{
         fill: false,
-        weight: 0,
+        weight: 2,
         fillColor: '#06cccc',
         color: '#06cccc',
         fillOpacity: 0.2,
-        opacity: 0.4
+        opacity: 1
     }
 };
 // Monkey-patch some properties for mapzen layer names, because
@@ -108,58 +109,16 @@ var vectormapConfig = {
     token: 'pk.eyJ1IjoiaXZhbnNhbmNoZXoiLCJhIjoiY2l6ZTJmd3FnMDA0dzMzbzFtaW10cXh2MSJ9.VsWCS9-EAX4_4W1K-nXnsA',
     interactive: true
 };
-function whenClicked(e) {
-    // e = event
-    console.log(e);
-    // You can make your ajax call declaration here
-    //$.ajax(...
-}
 L.vectorGrid.protobuf(vectormapUrl, vectormapConfig)
     .on('click', onMapClick) // add listner to vectorGrid layer
     .addTo(mymap); // add vectorGrid layer to map
 
-mymap.on('click',setMarker);
-
-
-
-// todo add market at click
-
-
 
 // handler of the click event
 function onMapClick(e) {
-    sendMessage(e);
+    if(!e.prevented)
+        e.prevented = true;
 
-    // todo mobile controll, no mobile
-    // setMarker(e);
-}
-
-
-
-// add marker to map in the clicked position
-var marker = null;
-function setMarker(e) {
-    if(marker){
-        mymap.removeLayer(marker);
-        marker = null;
-    }
-    marker = new L.marker(e.latlng, {id:'pointer',draggable:'false',icon:pinIcon});
-    // marker.on('dragend', function(event){
-    //     var marker = event.target;
-    //     var position = marker.getLatLng();
-    //     console.log('new position',event);
-    //     marker.setLatLng(position,{id:'pointer',draggable:'true'}).update();
-    //     // invio messaggio a fine drag
-    //     // sendMessage(event);
-    // });
-    mymap.addLayer(marker);
-    // invio messaggio dopo l'aggiunta del marker
-    // sendMessage(e);
-};
-
-
-
-function sendMessage(e){
     // lat, lon, zoom_level
     var params = Object.assign(e.latlng,e.layer.properties);
     // if empty event such as return key event
@@ -168,7 +127,28 @@ function sendMessage(e){
     // if the event has lat and lng params
     // enrich the params with the current zoom level
     params['zoom_level'] = mymap.getZoom();
-    console.debug("Click params:", params);
-    // send message to parent element
-    top.postMessage(params,domain);
+
+    // todo mobile controll, no mobile
+    setMarker(e,params);
 }
+
+
+// add marker to map in the clicked position
+var marker = null;
+function setMarker(e, params) {
+    if(marker){
+        mymap.removeLayer(marker);
+        marker = null;
+    }
+    marker = new L.marker(e.latlng, {id:'pointer',icon:pinIcon});
+    marker.on('click', function(event){
+        var marker = event.target;
+        var position = marker.getLatLng();
+        console.log('pointer clicked, sending:',params.name);
+        // send message to parent element
+        top.postMessage(params,domain);
+    });
+    mymap.addLayer(marker);
+};
+
+
