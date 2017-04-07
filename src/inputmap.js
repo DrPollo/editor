@@ -7,6 +7,7 @@ var lon = 7.686856;
 var baselayer = 'https://api.mapbox.com/styles/v1/drp0ll0/cj0tausco00tb2rt87i5c8pi0/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZHJwMGxsMCIsImEiOiI4bUpPVm9JIn0.NCRmAUzSfQ_fT3A86d9RvQ';
 var contrastlayer = 'https://api.mapbox.com/styles/v1/drp0ll0/cj167l5m800452rqsb9y2ijuq/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZHJwMGxsMCIsImEiOiI4bUpPVm9JIn0.NCRmAUzSfQ_fT3A86d9RvQ';
 
+// marker icon
 var htmlIcon = '<div class="pin"></div><div class="pulse"></div>';
 var pinIcon = L.divIcon({className: 'pointer',html:htmlIcon, iconSize:[30,30],iconAnchor:[15,15]});
 
@@ -16,6 +17,8 @@ var vectormapUrl = "//localhost:3095/tile/{z}/{x}/{y}";
 
 // recover search params
 var params = (new URL(location)).searchParams;
+
+
 
 
 
@@ -32,16 +35,6 @@ var domain = params.get('domain');
 if(!domain){
     console.error('missing mandatory param: "domain"');
 }
-
-
-
-// todo mobile auto control
-var mobile = 'auto';
-if(params.get('mobile') === 'false')
-    mobile = false;
-if(params.get('mobile') === 'true')
-    mobile = true;
-
 
 
 // definition of the map
@@ -109,9 +102,12 @@ var vectormapConfig = {
     token: 'pk.eyJ1IjoiaXZhbnNhbmNoZXoiLCJhIjoiY2l6ZTJmd3FnMDA0dzMzbzFtaW10cXh2MSJ9.VsWCS9-EAX4_4W1K-nXnsA',
     interactive: true
 };
-L.vectorGrid.protobuf(vectormapUrl, vectormapConfig)
-    .on('click', onMapClick) // add listner to vectorGrid layer
-    .addTo(mymap); // add vectorGrid layer to map
+// definition of the vectorGrid layer
+var vGrid = L.vectorGrid.protobuf(vectormapUrl, vectormapConfig);
+// add listner to vectorGrid layer
+vGrid.on('click', onMapClick);
+// add vector grid to the map
+vGrid.addTo(mymap); // add vectorGrid layer to map
 
 
 // handler of the click event
@@ -127,9 +123,8 @@ function onMapClick(e) {
     // if the event has lat and lng params
     // enrich the params with the current zoom level
     params['zoom_level'] = mymap.getZoom();
-
-    // todo mobile controll, no mobile
-    setMarker(e,params);
+    // set marker
+    setMarker(e, params);
 }
 
 
@@ -142,13 +137,14 @@ function setMarker(e, params) {
     }
     marker = new L.marker(e.latlng, {id:'pointer',icon:pinIcon});
     marker.on('click', function(event){
-        var marker = event.target;
-        var position = marker.getLatLng();
-        console.log('pointer clicked, sending:',params.name);
-        // send message to parent element
-        top.postMessage(params,domain);
+        sendMessage (params);
     });
     mymap.addLayer(marker);
 };
 
 
+function sendMessage (params){
+    console.log('pointer clicked, sending:',params.name);
+    // send message to parent element
+    top.postMessage(params,domain);
+}
