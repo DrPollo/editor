@@ -15,6 +15,12 @@
             width: 604px;
             text-align: center;
         }
+        .helper{
+            display: inline-block;
+            width: 30%;
+            margin: 0 auto;
+            vertical-align: top;
+        }
         iframe{
             border:2px solid #333;
             display: block;
@@ -32,25 +38,40 @@
     <!--<iframe title="input a location" width="600" height="600" src="src/index.html?domain=http://localhost:8080&lat=45.070312&lon=7.686856&zoom=12&contrast=false"></iframe>-->
     <p></p>
     <p>
-    <h4>Returned object to the hosting window:</h4>
-    <div id="helper">
-
+    <h3>Returned object to the hosting window</h3>
+    <div class="helper">
+        <h4>Area Info</h4>
+        <div>
+            Name: <span id="name"></span>
+        </div>
+        <div>
+            Area Id: <span id="id"></span>
+        </div>
+        <div>
+            OSM Id: <span id="osmid"></span>
+        </div>
+        <div>
+            Type: <span id="type"></span>
+        </div>
     </div>
+    <div class="helper">
+        <h4>Input Info</h4>
+        <div>
+            Latitude: <span id="lat"></span>
+        </div>
+        <div>
+            Longitude:<span id="lon"></span>
+        </div>
+        <div>
+            Zoom: <span id="zoom"></span>
+        </div>
+    </div>
+    <div class="helper">
+        <h4>InputMap Info</h4>
+        <div>
+            Src: <span id="src"></span>
+        </div>
     <div>
-        Latitude: <span id="lat"></span>
-    </div>
-    <div>
-        Longitude:<span id="lon"></span>
-    </div>
-    <div>
-        Zoom: <span id="zoom"></span>
-    </div>
-    <div>
-        Id: <span id="id"></span>
-    </div>
-    <div>
-        Name: <span id="name"></span>
-    </div>
     </p>
 </div>
 </body>
@@ -79,6 +100,9 @@
         document.getElementById("zoom").innerHTML = data.zoom_level;
         document.getElementById("id").innerHTML = data.id;
         document.getElementById("name").innerHTML = data.name;
+        document.getElementById("src").innerHTML = data.src;
+        document.getElementById("osmid").innerHTML = data.osm_id;
+        document.getElementById("type").innerHTML = data.type;
     }
 </script>
 </html>
