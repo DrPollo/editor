@@ -74,9 +74,12 @@ InputMap accepts and returns spatial params in [EPSG:4326 format](http://spatial
     name : <feature_name>,
     osm_id : <OSM_id>,
     type : <feature_type>,
-    level : <administrative_level>
+    level : <administrative_level>,
+    src: 'InputMap'
 }
 ```
+
+Please note that src: 'InputMap' should be used to avoid to catch all window (dom) events.
 
 1. id: {natural} feature id in FirstLife
 2. lat: {float} input latitude

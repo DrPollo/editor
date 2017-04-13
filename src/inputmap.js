@@ -4,8 +4,10 @@
 var zoom = 13;
 var lat = 45.070312;
 var lon = 7.686856;
-var baselayer = 'https://api.mapbox.com/styles/v1/drp0ll0/cj0tausco00tb2rt87i5c8pi0/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZHJwMGxsMCIsImEiOiI4bUpPVm9JIn0.NCRmAUzSfQ_fT3A86d9RvQ';
-var contrastlayer = 'https://api.mapbox.com/styles/v1/drp0ll0/cj167l5m800452rqsb9y2ijuq/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZHJwMGxsMCIsImEiOiI4bUpPVm9JIn0.NCRmAUzSfQ_fT3A86d9RvQ';
+var baselayer = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png';
+// var baselayer = 'https://api.mapbox.com/styles/v1/drp0ll0/cj0tausco00tb2rt87i5c8pi0/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZHJwMGxsMCIsImEiOiI4bUpPVm9JIn0.NCRmAUzSfQ_fT3A86d9RvQ';
+// var contrastlayer = 'https://api.mapbox.com/styles/v1/drp0ll0/cj167l5m800452rqsb9y2ijuq/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZHJwMGxsMCIsImEiOiI4bUpPVm9JIn0.NCRmAUzSfQ_fT3A86d9RvQ';
+var contrastlayer = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png';
 
 // marker icon
 var htmlIcon = '<div class="pin"></div><div class="pulse"></div>';
@@ -112,8 +114,10 @@ vGrid.addTo(mymap); // add vectorGrid layer to map
 
 // handler of the click event
 function onMapClick(e) {
-    if(!e.prevented)
-        e.prevented = true;
+    if(e.prevented)
+        return
+
+    e.prevented = true;
 
     // lat, lon, zoom_level
     var params = Object.assign(e.latlng,e.layer.properties);
@@ -125,6 +129,9 @@ function onMapClick(e) {
     params['zoom_level'] = mymap.getZoom();
     // set marker
     setMarker(e, params);
+    // manda messaggio
+    params.src = 'InputMap';
+    sendMessage (params);
 }
 
 
@@ -136,9 +143,9 @@ function setMarker(e, params) {
         marker = null;
     }
     marker = new L.marker(e.latlng, {id:'pointer',icon:pinIcon});
-    marker.on('click', function(event){
-        sendMessage (params);
-    });
+    // marker.on('click', function(event){
+    //     sendMessage (params);
+    // });
     mymap.addLayer(marker);
 };
 
