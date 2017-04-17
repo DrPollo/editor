@@ -20,6 +20,7 @@
             width: 30%;
             margin: 0 auto;
             vertical-align: top;
+            word-wrap: break-word;
         }
         iframe{
             border:2px solid #333;
@@ -33,9 +34,9 @@
     <p>
         InputMap in embed in an iframe tag
     </p>
-    <!--<iframe title="input a location" width="600" height="600" src="src/index.html?domain=https://inputmap.fldev.di.unito.it&lat=45.070312&lon=7.686856&zoom=12&contrast=false"></iframe>-->
-    <iframe title="input a location" width="600" height="600" src="src/index.html?domain=https://inputmap.firslife.org&lat=45.070312&lon=7.686856&zoom=12&contrast=false"></iframe>
-    <!--<iframe title="input a location" width="600" height="600" src="src/index.html?domain=http://localhost:8080&lat=45.070312&lon=7.686856&zoom=12&contrast=false"></iframe>-->
+    <!--<iframe title="input a location" width="600" height="600" src="src/index.html?domain=https://inputmap.fldev.di.unito.it&lat=45.070312&lon=7.686856&zoom=12&contrast=false&mode=lite"></iframe>-->
+    <iframe title="input a location" width="600" height="600" src="src/index.html?domain=https://inputmap.firslife.org&lat=45.070312&lon=7.686856&zoom=12&contrast=false&mode=lite"></iframe>
+    <!--<iframe title="input a location" width="600" height="600" src="src/index.html?domain=http://localhost:8080&lat=45.070312&lon=7.686856&zoom=12&contrast=false&mode=lite"></iframe>-->
     <p></p>
     <p>
     <h3>Returned object to the hosting window</h3>
@@ -71,6 +72,12 @@
         <div>
             Src: <span id="src"></span>
         </div>
+        <div>
+            Tileid: <span id="tileid"></span>
+        </div>
+        <div>
+            Tile: <span id="tile"></span>
+        </div>
     <div>
     </p>
 </div>
@@ -103,6 +110,8 @@
         document.getElementById("src").innerHTML = data.src;
         document.getElementById("osmid").innerHTML = data.osm_id;
         document.getElementById("type").innerHTML = data.type;
+        document.getElementById("tile").innerHTML = JSON.stringify(data.tile);
+        document.getElementById("tileid").innerHTML = data.tileid;
     }
 </script>
 </html>

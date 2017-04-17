@@ -56,6 +56,7 @@ The optional params are:
 3. zoom: {1-20} initial zoom level (1 is world level, 20 indoor level)
 4. contrast: {true|false} enable high contrast map (default false)
 5. *lan: {ISO 639-1 codes} language (default it) [List of ISO 639-1 codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
+6. mode: {lite | interactive} (default lite), in lite mode each click triggers a signal, in interactive mode the signal is sent only by clicking on the marker (to confirm the location)
 
 *params not ready yet
 
@@ -75,7 +76,8 @@ InputMap accepts and returns spatial params in [EPSG:4326 format](http://spatial
     osm_id : <OSM_id>,
     type : <feature_type>,
     level : <administrative_level>,
-    src: 'InputMap'
+    src: 'InputMap',
+    tileid: <x:y:z>
 }
 ```
 
@@ -89,6 +91,25 @@ Please note that src: 'InputMap' should be used to avoid to catch all window (do
 6. osm_id: {integer} osm id if applicable
 7. type: {string} feature type if applicable (OSM tag)
 8. level: {2-18} [OSM administrative level](http://wiki.openstreetmap.org/wiki/Tag:boundary%3Dadministrative), if applicable
+9. tileid: {string} indicating the id of the clicked grid tile, it can be used in case of null <id>
+10. tile: {array} [x,y,z] coordinates of the clicked tile
+
+To catch the message you require a listener over window events discriminating over the source of the message ('src' == 'InputMap'), see the following code:
+
+```
+ window.addEventListener( "message",
+        function (e) {
+            if (e.defaultPrevented)
+                return
+            e.preventDefault();
+
+            if (e.origin !== iframeDomain) {
+                return;
+            }
+            if(e.data.src == 'InputMap')
+                doSomething(e.data);
+        });
+ ```
 
 
 ## Notes

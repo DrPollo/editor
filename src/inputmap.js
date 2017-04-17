@@ -42,6 +42,13 @@ if(!domain){
 }
 
 
+// mode {lite = false | interactive = true}
+// lite mode: one click > event
+// interactive mode: first click > marker > click > event
+var mode = false;
+if(params.get('mode') === 'interactive')
+    mode = true;
+
 // definition of the map
 // map setup
 var layers = {
@@ -83,9 +90,9 @@ L.CircleMarker.mergeOptions(resetStyle);
 // var vectormapUrl = "http://{s}.tiles.mapbox.com/v4/mapbox.mapbox-streets-v6/{z}/{x}/{y}.vector.pbf?access_token={token}";
 var vectorMapStyling = {
     interactive:{
-        fill: false,
+        fill: true,
         weight: 2,
-        fillColor: '#06cccc',
+        // fillColor: '#06cccc',
         color: '#06cccc',
         fillOpacity: 0.2,
         opacity: 1
@@ -101,7 +108,7 @@ vectorMapStyling.roads      = vectorMapStyling.road;
 
 // config del layer
 var vectormapConfig = {
-    rendererFactory: L.canvas.tile,
+    rendererFactory: L.svg.tile,
     attribution: false,
     vectorTileLayerStyles: vectorMapStyling,
     token: 'pk.eyJ1IjoiaXZhbnNhbmNoZXoiLCJhIjoiY2l6ZTJmd3FnMDA0dzMzbzFtaW10cXh2MSJ9.VsWCS9-EAX4_4W1K-nXnsA',
@@ -138,11 +145,13 @@ function onVGridClick(e) {
     var tile = pointToTile(e.latlng.lng, e.latlng.lat, z);
     params['tile'] = tile;
     params['tileid'] = tile[0]+':'+tile[1]+':'+tile[2];
+    params.src = 'InputMap';
     // set marker
     setMarker(e, params);
-    // manda messaggio
-    params.src = 'InputMap';
-    sendMessage (params);
+    // if mode = lite send message
+    if(!mode){
+        sendMessage (params);
+    }
 }
 // handler of the click event
 function onMapClick(e) {
@@ -168,11 +177,16 @@ function onMapClick(e) {
     var tile = pointToTile(e.latlng.lng, e.latlng.lat, z);
     params['tile'] = tile;
     params['tileid'] = tile[0]+':'+tile[1]+':'+tile[2];
+    params['type'] = 'tile';
+    params['name'] = 'tile';
+    params['id'] = tile[0]+':'+tile[1]+':'+tile[2];
+    params.src = 'InputMap';
     // set marker
     setMarker(e, params);
-    // manda messaggio
-    params.src = 'InputMap';
-    sendMessage (params);
+    // if mode = lite send message
+    if(!mode) {
+        sendMessage(params);
+    }
 }
 
 
@@ -184,9 +198,14 @@ function setMarker(e, params) {
         marker = null;
     }
     marker = new L.marker(e.latlng, {id:'pointer',icon:pinIcon});
-    // marker.on('click', function(event){
-    //     sendMessage (params);
-    // });
+
+    // if mode == interactive send message at marker click
+    if(mode){
+        marker.on('click', function(event){
+            sendMessage (params);
+        });
+    }
+
     mymap.addLayer(marker);
 };
 
