@@ -17,6 +17,7 @@
   "author": "Alessio Antonini, Luigi Sanasi",
   "license": "MIT",
   "dependencies": {
+    "@mapbox/tilebelt": "^1.0.1",
     "express": "^4.15.2",
     "leaflet": "^1.0.3",
     "leaflet.vectorgrid": "^1.2.0",

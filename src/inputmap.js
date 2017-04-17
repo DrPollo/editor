@@ -1,5 +1,7 @@
 'use strict'
 
+// var tilebelt = require('@mapbox/tilebelt');
+
 // defaults
 var zoom = 13;
 var lat = 45.070312;
@@ -108,17 +110,21 @@ var vectormapConfig = {
 // definition of the vectorGrid layer
 var vGrid = L.vectorGrid.protobuf(vectormapUrl, vectormapConfig);
 // add listner to vectorGrid layer
-vGrid.on('click', onMapClick);
+vGrid.on('click', onVGridClick);
 // add vector grid to the map
 vGrid.addTo(mymap); // add vectorGrid layer to map
-
+mymap.on('click',onMapClick);
+// vGrid.addEventParent('click',onMapClick);
 
 // handler of the click event
-function onMapClick(e) {
-    if(e.prevented)
+function onVGridClick(e) {
+    if(e.originalEvent.defaultPrevented)
         return
 
-    e.prevented = true;
+    // prevent map click event
+    e.originalEvent.preventDefault();
+
+    console.log('vGrid click',e);
 
     // lat, lon, zoom_level
     var params = Object.assign(e.latlng,e.layer.properties);
@@ -127,7 +133,41 @@ function onMapClick(e) {
         return
     // if the event has lat and lng params
     // enrich the params with the current zoom level
-    params['zoom_level'] = mymap.getZoom();
+    var z = mymap.getZoom();
+    params['zoom_level'] = z;
+    var tile = pointToTile(e.latlng.lng, e.latlng.lat, z);
+    params['tile'] = tile;
+    params['tileid'] = tile[0]+':'+tile[1]+':'+tile[2];
+    // set marker
+    setMarker(e, params);
+    // manda messaggio
+    params.src = 'InputMap';
+    sendMessage (params);
+}
+// handler of the click event
+function onMapClick(e) {
+    // console.log('map click',e);
+    if(e.originalEvent.defaultPrevented)
+        return
+    //
+    // e.prevented = true;
+    //
+    console.log('map click',e);
+
+    // lat, lon, zoom_level
+    var params = Object.assign(e.latlng);
+    // if empty event such as return key event
+    if(!params)
+        return
+
+
+    // if the event has lat and lng params
+    // enrich the params with the current zoom level
+    var z = mymap.getZoom();
+    params['zoom_level'] = z;
+    var tile = pointToTile(e.latlng.lng, e.latlng.lat, z);
+    params['tile'] = tile;
+    params['tileid'] = tile[0]+':'+tile[1]+':'+tile[2];
     // set marker
     setMarker(e, params);
     // manda messaggio
@@ -152,7 +192,29 @@ function setMarker(e, params) {
 
 
 function sendMessage (params){
-    console.log('pointer clicked, sending:',params.name);
+    console.log('pointer clicked, sending:',params);
     // send message to parent element
     top.postMessage(params,domain);
+}
+
+
+
+
+// code from @mapbox/tilebelt
+
+var d2r = Math.PI / 180,
+    r2d = 180 / Math.PI;
+function pointToTile(lon, lat, z) {
+    var tile = pointToTileFraction(lon, lat, z);
+    tile[0] = Math.floor(tile[0]);
+    tile[1] = Math.floor(tile[1]);
+    return tile;
+}
+
+function pointToTileFraction(lon, lat, z) {
+    var sin = Math.sin(lat * d2r),
+        z2 = Math.pow(2, z),
+        x = z2 * (lon / 360 + 0.5),
+        y = z2 * (0.5 - 0.25 * Math.log((1 + sin) / (1 - sin)) / Math.PI);
+    return [x, y, z];
 }
