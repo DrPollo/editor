@@ -157,10 +157,10 @@ function onVGridClick(e) {
 function onMapClick(e) {
     // console.log('map click',e);
     if(e.originalEvent.defaultPrevented)
-        return
-    //
-    // e.prevented = true;
-    //
+        return;
+
+    e.originalEvent.preventDefault();
+
     console.log('map click',e);
 
     // lat, lon, zoom_level
