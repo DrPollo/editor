@@ -20,20 +20,34 @@ var pinIcon = L.divIcon({className: 'pointer',html:htmlIcon, iconSize:[30,30],ic
 // var vectormapUrl = "https://tiles.fldev.di.unito.it/tile/{z}/{x}/{y}";
 var vectormapUrl = "https://tiles.firstlife.org/tile/{z}/{x}/{y}";
 
-// recover search params
-var params = (new URL(location)).searchParams;
-
 // defaults
 var contrast = false;
 var domain = null;
 var mode = false;
+var params = null;
+
+
+// recover search params
+
+// check for IE
+var ua = window.navigator.userAgent;
+var msie = ua.indexOf("MSIE ");
+
+// If Internet Explorer, return version number
+if (msie > 0) {
+    params = escape(location.search);
+}else{
+    params = (new URL(location)).searchParams;
+}
+
+
 
 if(params){
 // override location from get params
-lat = params.get('lat') ? params.get('lat') : lat;
-lon = params.get('lon') ? params.get('lon') : lon;
-zoom = params.get('zoom') ? params.get('zoom') : zoom;
-contrast = params.get('contrast') === 'true' ;
+    lat = params.get('lat') ? params.get('lat') : lat;
+    lon = params.get('lon') ? params.get('lon') : lon;
+    zoom = params.get('zoom') ? params.get('zoom') : zoom;
+    contrast = params.get('contrast') === 'true' ;
 
     // recover domain param (used for security reasons)
     domain = params.get('domain');
