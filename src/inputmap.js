@@ -23,29 +23,33 @@ var vectormapUrl = "https://tiles.firstlife.org/tile/{z}/{x}/{y}";
 // recover search params
 var params = (new URL(location)).searchParams;
 
+// defaults
+var contrast = false;
+var domain = null;
+var mode = false;
 
-
-
-
-
+if(params){
 // override location from get params
 lat = params.get('lat') ? params.get('lat') : lat;
 lon = params.get('lon') ? params.get('lon') : lon;
 zoom = params.get('zoom') ? params.get('zoom') : zoom;
-var contrast = params.get('contrast') === 'true' ;
+contrast = params.get('contrast') === 'true' ;
 
-// recover domain param (used for security reasons)
-var domain = params.get('domain');
-// if domain does not exist trows a console error
-if(!domain){
-    console.error('missing mandatory param: "domain"');
+    // recover domain param (used for security reasons)
+    domain = params.get('domain');
+    // if domain does not exist trows a console error
+    if(!domain){
+        console.error('missing mandatory param: "domain"');
+    }
+}else{
+    console.error('cannot retrieve search params from URL location');
 }
+
 
 
 // mode {lite = false | interactive = true}
 // lite mode: one click > event
 // interactive mode: first click > marker > click > event
-var mode = false;
 if(params.get('mode') === 'interactive')
     mode = true;
 
