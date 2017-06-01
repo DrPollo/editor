@@ -77,7 +77,9 @@ InputMap accepts and returns spatial params in [EPSG:4326 format](http://spatial
     type : <feature_type>,
     level : <administrative_level>,
     src: 'InputMap',
-    tileid: <x:y:z>
+    tileid: <x:y:z>,
+    display_name: <string>,
+    address: <Object>
 }
 ```
 
@@ -93,6 +95,8 @@ Please note that src: 'InputMap' should be used to avoid to catch all window (do
 8. level: {2-18} [OSM administrative level](http://wiki.openstreetmap.org/wiki/Tag:boundary%3Dadministrative), if applicable
 9. tileid: {string} indicating the id of the clicked grid tile, it can be used in case of null <id>
 10. tile: {array} [x,y,z] coordinates of the clicked tile
+11. displa_name: {string} from Nominatim reverse geocoding service
+12. address: {object} from Nominatim reverse geocoding service
 
 To catch the message you require a listener over window events discriminating over the source of the message ('src' == 'InputMap'), see the following code:
 
@@ -117,10 +121,14 @@ To use InputMap there are no specific requirements, rather than the browser supp
 
 For more information please refer to the *Browser compatibility* section at [postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage).
 
+### Services
+1. FirstLife APIs
+2. Nominatim APIs
 
 ### Dependences
 1. [Leaflet](https://github.com/Leaflet/Leaflet)
 2. [VectorGrid](https://github.com/Leaflet/Leaflet.VectorGrid)
+3. [Control.Geocoder](https://github.com/perliedman/leaflet-control-geocoder)
 
 ### Dev Dependences
 1. [serve](https://www.npmjs.com/package/serve)
