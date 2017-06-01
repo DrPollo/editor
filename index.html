@@ -79,6 +79,16 @@
             Tile: <span id="tile"></span>
         </div>
     <div>
+    <div class="helper">
+        <h4>Nominatim</h4>
+        <div>
+            Display Name: <span id="display_name"></span>
+        </div>
+        <div>
+            Address: <span id="address"></span>
+        </div>
+    <div>
+
     </p>
 </div>
 </body>
@@ -110,8 +120,10 @@
         document.getElementById("src").innerHTML = data.src;
         document.getElementById("osmid").innerHTML = data.osm_id;
         document.getElementById("type").innerHTML = data.type;
-        document.getElementById("tile").innerHTML = JSON.stringify(data.tile);
+        document.getElementById("tile").innerHTML = data.tile ? JSON.stringify(data.tile) : 'undefined';
         document.getElementById("tileid").innerHTML = data.tileid;
+        document.getElementById("display_name").innerHTML = data.display_name ? data.display_name : 'undefined';
+        document.getElementById("address").innerHTML = data.address ? JSON.stringify(data.address) : 'undefined';
     }
 </script>
 </html>
