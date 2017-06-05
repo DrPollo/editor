@@ -243,7 +243,7 @@ function setMarker(e, params) {
 
 
 function sendMessage (params){
-    var url = 'http://nominatim.openstreetmap.org/reverse?';
+    var url = 'https://nominatim.openstreetmap.org/reverse?';
     // zoom cannot be more than 18 and the mapping with nominatim result require +4
     var zoom = Math.min(18,params.level+4);
     // nominatim query
