@@ -259,7 +259,7 @@ function sendMessage (params){
                 params.osm_id = response.osm_id;
         }        // send message to parent element
         top.postMessage(params,domain);
-        console.log('pointer clicked, sending:',params);
+        console.log('pointer clicked, sending:',params, "to",domain);
     };
     try{
         var xhr = new XMLHttpRequest();
@@ -270,7 +270,7 @@ function sendMessage (params){
         console.error("Error: geocoding failed",e);
         // send message to parent element
         top.postMessage(params,domain);
-        console.log('pointer clicked, sending:',params);
+        console.log('pointer clicked, sending:',params, "to",domain);
     }
 }
 
