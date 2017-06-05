@@ -163,7 +163,7 @@ function onVGridClick(e) {
     e.originalEvent.preventDefault();
     // e.originalEvent.defaultPrevented = true;
 
-    console.log('vGrid click',e);
+    // console.log('vGrid click',e);
 
     // lat, lon, zoom_level
     var params = Object.assign(e.latlng,e.layer.properties);
@@ -193,7 +193,7 @@ function onMapClick(e) {
 
     e.originalEvent.preventDefault();
 
-    console.log('map click',e);
+    // console.log('map click',e);
 
     // lat, lon, zoom_level
     var params = Object.assign(e.latlng);
@@ -247,10 +247,10 @@ function sendMessage (params){
     // zoom cannot be more than 18 and the mapping with nominatim result require +4
     var zoom = Math.min(18,params.level+4);
     // nominatim query
-    var query = url.concat("format=json","&lat=",params.lat,"&lon=",params.lng,"&zoom=",params.level+2);
+    var query = url.concat("format=json","&lat=",params.lat,"&lon=",params.lng,"&zoom=",params.zoom_level+2);
     // console.log(query);
     var listner = function () {
-        console.log(this);
+        // console.log(this);
         if(this.status === 200) {
             var response = JSON.parse(this.response);
             // console.log(response);
