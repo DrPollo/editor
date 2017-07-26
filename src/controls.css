@@ -1,0 +1,25 @@
+.leaflet-touch .leaflet-control-layers, .leaflet-touch .leaflet-bar {
+    border:none;
+    /*box-shadow: 1px 1px 5px rgba(0,0,0,0.35);*/
+}
+.leaflet-touch .leaflet-control-geocoder{
+    box-shadow: 1px 1px 5px rgba(0,0,0,0.35);
+}
+.leaflet-control-geocoder button{
+    border-radius: 2px;
+}
+.leaflet-touch .leaflet-bar a {
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+}
+.leaflet-bar a:first-child, .leaflet-bar a:last-child  {
+    border-radius: 20px;
+    box-shadow: 1px 1px 5px rgba(0,0,0,0.35);
+}
+.leaflet-bar a:first-child {
+    margin-bottom: 8px;
+}
+.leaflet-bar a:last-child {
+
+}

@@ -6,10 +6,16 @@ var zoom = 13;
 var locationZoom = 18;
 var lat = 45.070312;
 var lon = 7.686856;
-var baselayer = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png';
-var contrastlayer = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png';
-// var baselayer = 'https://api.mapbox.com/styles/v1/drp0ll0/cj0tausco00tb2rt87i5c8pi0/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZHJwMGxsMCIsImEiOiI4bUpPVm9JIn0.NCRmAUzSfQ_fT3A86d9RvQ';
-// var contrastlayer = 'https://api.mapbox.com/styles/v1/drp0ll0/cj167l5m800452rqsb9y2ijuq/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZHJwMGxsMCIsImEiOiI4bUpPVm9JIn0.NCRmAUzSfQ_fT3A86d9RvQ';
+var baseColor = '#c32630';
+var mapOptions = {
+    center: [lat,lon],
+    zoom: zoom
+};
+var zoomControlPosition = 'bottomright';
+// var baselayer = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png';
+// var contrastlayer = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png';
+var baselayer = 'https://api.mapbox.com/styles/v1/drp0ll0/cj0tausco00tb2rt87i5c8pi0/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZHJwMGxsMCIsImEiOiI4bUpPVm9JIn0.NCRmAUzSfQ_fT3A86d9RvQ';
+var contrastlayer = 'https://api.mapbox.com/styles/v1/drp0ll0/cj167l5m800452rqsb9y2ijuq/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZHJwMGxsMCIsImEiOiI4bUpPVm9JIn0.NCRmAUzSfQ_fT3A86d9RvQ';
 
 // marker icon
 var htmlIcon = '<div class="pin"></div><div class="pulse"></div>';
@@ -26,6 +32,34 @@ var domain = null;
 var mode = false;
 var params = null;
 
+
+// language
+var defaultLang = 0;
+var languages = ['it','en'];
+// tooltips
+var tooltipLabel = {
+    it : 'Click per localizzare',
+    en : 'Click to geolocate'
+};
+var tooltipCancel = {
+    it : 'Click per cancellare la selezione',
+    en : 'Click to reset location'
+};
+var userLang = navigator.language || navigator.userLanguage;
+var lang = languages[defaultLang];
+for(var i = 0; i < languages.length; i++){
+    var l = languages[i];
+    if(userLang.search(l) > -1){
+        lang = l;
+    }
+}
+var cancelButton = '<button onclick="cancel()" title="'+tooltipCancel[lang]+'">&#x2715;</button>';
+
+// get label
+var label = document.getElementById('label');
+var defaultLabel = tooltipLabel[lang];
+label.innerHTML = defaultLabel;
+console.debug('current language',lang);
 
 // recover search params
 
@@ -82,11 +116,14 @@ var layers = {
 
 
 console.log('select base layer:',contrast,contrast ? 'contrast': 'base', "test",params.get('contrast'));
-var mymap = L.map('inputmap').setView([lat, lon], zoom );
+var mymap = L.map('inputmap',mapOptions);
+mymap.setView([lat, lon], zoom );
 layers[contrast ? 'contrast': 'base'].addTo(mymap);
+mymap.zoomControl.setPosition(zoomControlPosition);
 // geocoder
 var geocoderSettings = {
-    defaultMarkGeocode: false
+    defaultMarkGeocode: false,
+    position: 'topleft'
 };
 var geocoder = L.Control.geocoder(geocoderSettings);
 geocoder.addTo(mymap);
@@ -117,8 +154,7 @@ var vectorMapStyling = {
     interactive:{
         fill: true,
         weight: 2,
-        // fillColor: '#06cccc',
-        color: '#06cccc',
+        color: baseColor,
         fillOpacity: 0.2,
         opacity: 1
     }
@@ -259,6 +295,7 @@ function sendMessage (params){
                 params.osm_id = response.osm_id;
         }        // send message to parent element
         top.postMessage(params,domain);
+        setLabel(params);
         console.log('pointer clicked, sending:',params, "to",domain);
     };
     try{
@@ -270,10 +307,43 @@ function sendMessage (params){
         console.error("Error: geocoding failed",e);
         // send message to parent element
         top.postMessage(params,domain);
+        setLabel(params);
         console.log('pointer clicked, sending:',params, "to",domain);
     }
 }
 
+
+// reset focus
+function cancel(){
+    if(marker){
+        mymap.removeLayer(marker);
+        marker = null;
+    }
+    // reset label
+    label.innerHTML = defaultLabel;
+    // send reset message
+    top.postMessage({src:'InputMap',reset:true},domain);
+
+}
+
+
+
+// set label current focus
+function setLabel(params) {
+    // set default content
+    var content = 'lat: '+params.lat+', lon:'+params.lng+', zoom: '+params.zoom_level;
+    if(params.name && params.name !== params.type){
+        // set displa_name
+        content = params.name;
+    } else if(params.display_name){
+        // set display_name
+        content = params.display_name;
+    } else if(params.type){
+        // set type
+        content = params.type;
+    }
+    label.innerHTML = cancelButton+content;
+}
 
 
 // code from @mapbox/tilebelt

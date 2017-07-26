@@ -13,13 +13,36 @@
             top: 0;
             left: 0;
         }
+        #label{
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: white;
+            box-shadow: 1px 1px 5px rgba(0,0,0,0.35);
+            padding: 0px 8px;
+            font-family: Verdana, Arial, Calibri;
+            max-width: 50%;
+            border-radius: 2px;
+            color: #333;
+            min-height: 30px;
+            line-height: 30px;
+        }
+        #label button {
+            margin-right: 8px;
+            vertical-align: text-bottom;
+            border: 0px solid;
+            background: white;
+            cursor: pointer;
+        }
     </style>
-    <link type="text/css" rel="stylesheet" href="/src/pointer.css">
     <link type="text/css" rel="stylesheet" href="/node_modules/leaflet/dist/leaflet.css">
     <link type="text/css" rel="stylesheet" href="/libs/leaflet.control-geocoder/control-geocoder.css">
+    <link type="text/css" rel="stylesheet" href="/src/pointer.css">
+    <link type="text/css" rel="stylesheet" href="/src/controls.css">
 </head>
 <body id="body">
     <div id="inputmap"></div>
+    <div id="label"></div>
 </body>
 <script type="text/javascript" src="/node_modules/leaflet/dist/leaflet.js"></script>
 <script type="text/javascript" src="/node_modules/leaflet.vectorgrid/dist/Leaflet.VectorGrid.bundled.js"></script>
