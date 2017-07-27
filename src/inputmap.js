@@ -32,6 +32,8 @@ var domain = null;
 var mode = false;
 var params = null;
 
+var label = document.getElementById('label');
+
 
 // language
 var defaultLang = 0;
@@ -53,14 +55,6 @@ for(var i = 0; i < languages.length; i++){
         lang = l;
     }
 }
-var cancelButton = '<button onclick="cancel()" title="'+tooltipCancel[lang]+'">&#x2715;</button>';
-var defIcon = '<button " title="'+tooltipLabel[lang]+'">&#x02713;</button>';
-
-// get label
-var label = document.getElementById('label');
-var defaultLabel = defIcon+tooltipLabel[lang];
-label.innerHTML = defaultLabel;
-console.debug('current language',lang);
 
 // recover search params
 
@@ -83,7 +77,7 @@ if(params){
     lon = params.get('lon') ? params.get('lon') : lon;
     zoom = params.get('zoom') ? params.get('zoom') : zoom;
     contrast = params.get('contrast') === 'true' ;
-
+    lang = params.get('lang') ? params.get('lang') : lang;
     // recover domain param (used for security reasons)
     domain = params.get('domain');
     // if domain does not exist trows a console error
@@ -93,6 +87,15 @@ if(params){
 }else{
     console.error('cannot retrieve search params from URL location');
 }
+
+
+// set labels
+var defaultLabel = defIcon+tooltipLabel[lang];
+label.innerHTML = defaultLabel;
+console.debug('current language',lang);
+var cancelButton = '<button onclick="cancel()" title="'+tooltipCancel[lang]+'">&#x2715;</button>';
+var defIcon = '<button " title="'+tooltipLabel[lang]+'">&#x02713;</button>';
+
 
 
 

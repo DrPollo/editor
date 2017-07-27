@@ -55,10 +55,10 @@ The optional params are:
 2. lon: {float} initial longiture
 3. zoom: {1-20} initial zoom level (1 is world level, 20 indoor level)
 4. contrast: {true|false} enable high contrast map (default false)
-5. *lan: {ISO 639-1 codes} language (default it) [List of ISO 639-1 codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
+5. lang: {ISO 639-1 codes} language (default agent lang if defined or it) [List of ISO 639-1 codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
 6. mode: {lite | interactive} (default lite), in lite mode each click triggers a signal, in interactive mode the signal is sent only by clicking on the marker (to confirm the location)
 
-*params not ready yet
+
 
 
 ## Use
