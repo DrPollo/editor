@@ -54,10 +54,11 @@ for(var i = 0; i < languages.length; i++){
     }
 }
 var cancelButton = '<button onclick="cancel()" title="'+tooltipCancel[lang]+'">&#x2715;</button>';
+var defIcon = '<button " title="'+tooltipLabel[lang]+'">&#x02713;</button>';
 
 // get label
 var label = document.getElementById('label');
-var defaultLabel = tooltipLabel[lang];
+var defaultLabel = defIcon+tooltipLabel[lang];
 label.innerHTML = defaultLabel;
 console.debug('current language',lang);
 
