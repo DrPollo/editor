@@ -37,7 +37,7 @@ var label = document.getElementById('label');
 
 // language
 var defaultLang = 0;
-var languages = ['it','en'];
+var languages = ['en','it'];
 // tooltips
 var tooltipLabel = {
     it : 'Click per localizzare',

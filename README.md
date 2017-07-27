@@ -1,5 +1,15 @@
 # InputMap
 
+##### Change logs
+1) Language support: introduced lang param and check on agent language as default
+2) Label box with tooltip and location name
+3) Cancel action to reset the current location
+4) Material-like style
+5) Search bar connected to Nominatim search API
+6) Nominatim reverce geocoding of user's input in the result message when available: "address" and "display_name".
+
+
+## Introduction
 
 Web map to input enhanced location in web applications and websites.
 InputMap uses leafletjs 1.x and vectorGrid plugin to provide an interactive layer of relevant area.
@@ -14,7 +24,7 @@ InputMap returns an object to the hosting window extending the latitude and long
 
 [![InputMap test](screenshot.png)](http://inputmap.fldev.di.unito.it)
 
-You can find this test page for InputMap at [http://inputmap.fldev.di.unito.it](http://inputmap.fldev.di.unito.it)
+You can find this test page for InputMap at [https://inputmap.firstlife.org/test](https://inputmap.firstlife.org/test)
 
 
 Example of object returned to the host window:
@@ -55,7 +65,7 @@ The optional params are:
 2. lon: {float} initial longiture
 3. zoom: {1-20} initial zoom level (1 is world level, 20 indoor level)
 4. contrast: {true|false} enable high contrast map (default false)
-5. lang: {ISO 639-1 codes} language (default agent lang if defined or it) [List of ISO 639-1 codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
+5. lang: {[ISO 639-1 codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)} language (default agent lang if defined or "en") 
 6. mode: {lite | interactive} (default lite), in lite mode each click triggers a signal, in interactive mode the signal is sent only by clicking on the marker (to confirm the location)
 
 
@@ -114,7 +124,13 @@ To catch the message you require a listener over window events discriminating ov
                 doSomething(e.data);
         });
  ```
-
+## Reset location
+Users can cancel the current selection by click on a cancel button in the label box (top right corner). Cancel action triggers an empty message to the host application containing the "src" field only:
+``` 
+{
+    "src": "InputMap"
+}
+```
 
 ## Notes
 To use InputMap there are no specific requirements, rather than the browser support to *postMessage()* method.
