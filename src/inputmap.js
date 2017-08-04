@@ -90,11 +90,12 @@ if(params){
 
 
 // set labels
+var defIcon = '<button " title="'+tooltipLabel[lang]+'">&#x02713;</button>';
 var defaultLabel = defIcon+tooltipLabel[lang];
 label.innerHTML = defaultLabel;
 console.debug('current language',lang);
 var cancelButton = '<button onclick="cancel()" title="'+tooltipCancel[lang]+'">&#x2715;</button>';
-var defIcon = '<button " title="'+tooltipLabel[lang]+'">&#x02713;</button>';
+
 
 
 
