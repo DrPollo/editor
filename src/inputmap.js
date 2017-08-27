@@ -23,8 +23,8 @@ var pinIcon = L.divIcon({className: 'pointer',html:htmlIcon, iconSize:[30,30],ic
 
 // vectorGrid
 // var vectormapUrl = "//localhost:3095/tile/{z}/{x}/{y}";
-// var vectormapUrl = "https://tiles.fldev.di.unito.it/tile/{z}/{x}/{y}";
-var vectormapUrl = "https://tiles.firstlife.org/tile/{z}/{x}/{y}";
+var vectormapUrl = "https://tiles.fldev.di.unito.it/tile/{z}/{x}/{y}";
+// var vectormapUrl = "https://tiles.firstlife.org/tile/{z}/{x}/{y}";
 
 // defaults
 var contrast = false;
@@ -149,21 +149,175 @@ L.CircleMarker.mergeOptions(resetStyle);
 // end reset styles
 
 
+var ordering = function (layers, zoom) {
+    // console.debug('reordering....',layers);
+    switch (zoom) {
+        case 1:
+        case 2:
+            return [
+                "nazioni",
+                "waterareas",
+                "waterways"
+            ];
+            break;
+        case 3:
+        case 4:
+            return [
+                "nazioni",
+                "regioni",
+                "provincie",
+                // "waterareas",
+                // "waterways"
+            ];
+            break;
+        case 5:
+        case 6:
+            return [
+                "nazioni",
+                "regioni",
+                "provincie",
+                // "landusages",
+                // "roads",
+                // "waterareas",
+                "waterways"];
+            break;
+        case 7:
+        case 8:
+            return [
+                "nazioni",
+                "regioni",
+                "provincie",
+                // "landusages",
+                // "roads",
+                // "waterareas",
+                // "waterways",
+                "comuni",];
+            break;
+        case 9:
+        case 10:
+            return [
+                "nazioni",
+                "regioni",
+                "provincie",
+                // "landusages",
+                // "roads",
+                // "waterareas",
+                // "waterways",
+                "comuni"];
+            break;
+        case 11:
+        case 12:
+            return [
+                "provincie",
+                // "landusages",
+                // "roads",
+                // "waterareas",
+                // "waterways",
+                "comuni"];
+            break;
+        case 13:
+        case 14:
+            return [
+                "provincie",
+                "quartieri",
+                // "landusages",
+                "comuni"];
+            break;
+        case 15:
+        case 16:
+            return [
+                "comuni",
+                "city_block",
+                // "landusages",
+                // "waterareas",
+                // "waterways",
+                "quartieri",];
+            break;
+        case 17:
+        case 18:
+            return [
+                "site",
+                "landusages",
+                "building",
+                "roads",
+                "waterareas",
+                "waterways",
+                "quartieri",
+                "city_block",];
+            break;
+        case 19:
+        case 20:
+            return [
+                "site",
+                "building",
+                "roads",
+                "waterareas",
+                "waterways",
+                "indoor"];
+            break;
+        default:
+            return Object.keys(layers);
+    }
+};
+var featureStyle = function(properties,z) {
+    var style = {
+        weight: 1,
+        color: baseColor,
+        opacity: 1,
+        fill: true
+    };
+    if (properties.type === 'indoor') {
+        style.fillColor = baseColor;
+        style.fillOpacity = 0.5;
+    }
+    return style;
+};
+var vectorMapStyling = {
+    nazioni: featureStyle,
+    regioni: featureStyle,
+    provincie: featureStyle,
+    comuni: featureStyle,
+    circoscrizioni: featureStyle,
+    quartieri: featureStyle,
+    city_block: featureStyle,
+    site: featureStyle,
+    building: featureStyle,
+    // landusages: featureStyle,
+    // roads: featureStyle,
+    // waterareas: featureStyle,
+    // waterways: featureStyle,
+    indoor: featureStyle,
+    interactive: featureStyle
+};
 
 
 
 
 
 // var vectormapUrl = "http://{s}.tiles.mapbox.com/v4/mapbox.mapbox-streets-v6/{z}/{x}/{y}.vector.pbf?access_token={token}";
-var vectorMapStyling = {
-    interactive:{
-        fill: true,
-        weight: 2,
-        color: baseColor,
-        fillOpacity: 0.2,
-        opacity: 1
-    }
-};
+// var vectorMapStyling = {
+//     interactive:{
+//         fill: true,
+//         weight: 2,
+//         color: baseColor,
+//         fillOpacity: 0.2,
+//         opacity: 1
+//     },
+//     circoscrizioni:{
+//         fill: true,
+//         weight: 2,
+//         color: baseColor,
+//         fillOpacity: 0.2,
+//         opacity: 1
+//     },
+//     comuni:{
+//         fill: true,
+//         weight: 2,
+//         color: baseColor,
+//         fillOpacity: 0.2,
+//         opacity: 1
+//     }
+// };
 // Monkey-patch some properties for mapzen layer names, because
 // instead of "building" the data layer is called "buildings" and so on
 vectorMapStyling.buildings  = vectorMapStyling.building;
@@ -178,7 +332,8 @@ var vectormapConfig = {
     attribution: false,
     vectorTileLayerStyles: vectorMapStyling,
     token: 'pk.eyJ1IjoiaXZhbnNhbmNoZXoiLCJhIjoiY2l6ZTJmd3FnMDA0dzMzbzFtaW10cXh2MSJ9.VsWCS9-EAX4_4W1K-nXnsA',
-    interactive: true
+    interactive: true,
+    layersOrdering: ordering
 };
 // definition of the vectorGrid layer
 var vGrid = L.vectorGrid.protobuf(vectormapUrl, vectormapConfig);
