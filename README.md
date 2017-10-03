@@ -67,7 +67,13 @@ The optional params are:
 4. contrast: {true|false} enable high contrast map (default false)
 5. lang: {[ISO 639-1 codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)} language (default agent lang if defined or "en") 
 6. mode: {lite | interactive} (default lite), in lite mode each click triggers a signal, in interactive mode the signal is sent only by clicking on the marker (to confirm the location)
+7. state: {input|view|edit} (default entry)
 
+***state*** param can be used to use input map in the following modalities:
+  
+  1. input (default): no markers pre inserted, user's actions will trigger input actions accordingly to mode param
+  2. view: marker on lat lng position at the defined zoom level, the marker cannot be modified
+  3. edit: marker at lat, lng and zoom that can be edited
 
 
 

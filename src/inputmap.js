@@ -32,6 +32,9 @@ var domain = null;
 var mode = false;
 var params = null;
 
+// inputMap states: input, view, edit
+var state = 'input';
+
 var label = document.getElementById('label');
 
 
@@ -84,6 +87,11 @@ if(params){
     if(!domain){
         console.error('missing mandatory param: "domain"');
     }
+    // get required state if defined
+    if(params.get('state')){
+        state = params.get('state');
+    }
+
 }else{
     console.error('cannot retrieve search params from URL location');
 }
@@ -95,6 +103,7 @@ var defaultLabel = defIcon+tooltipLabel[lang];
 label.innerHTML = defaultLabel;
 console.debug('current language',lang);
 var cancelButton = '<button onclick="cancel()" title="'+tooltipCancel[lang]+'">&#x2715;</button>';
+var infoIcon = '<i style="font-size:1em;position:absolute;left:9px;top:7px;" class="material-icons">location_on</i>';
 
 
 
@@ -293,7 +302,6 @@ var vectorMapStyling = {
 
 
 
-
 // var vectormapUrl = "http://{s}.tiles.mapbox.com/v4/mapbox.mapbox-streets-v6/{z}/{x}/{y}.vector.pbf?access_token={token}";
 // var vectorMapStyling = {
 //     interactive:{
@@ -337,11 +345,10 @@ var vectormapConfig = {
 };
 // definition of the vectorGrid layer
 var vGrid = L.vectorGrid.protobuf(vectormapUrl, vectormapConfig);
-// add listner to vectorGrid layer
-vGrid.on('click', onVGridClick);
+
 // add vector grid to the map
 vGrid.addTo(mymap); // add vectorGrid layer to map
-mymap.on('click',onMapClick);
+
 
 geocoder.on('markgeocode', function (e) {
     console.log('geocode',e);
@@ -350,10 +357,50 @@ geocoder.on('markgeocode', function (e) {
 
 // vGrid.addEventParent('click',onMapClick);
 
+// reference to current marker
+var marker = null;
+
+
+
+/*
+ * State management:
+ * 1) input
+ * 2) edit
+ * 3) view
+ */
+
+
+if (state === 'view' || state === 'edit') {
+    // add marker at current map center
+    if (marker) {
+        mymap.removeLayer(marker);
+        marker = null;
+    }
+    marker = new L.marker(L.latLng(lat, lon), {id: 'pointer', icon: pinIcon});
+
+    mymap.addLayer(marker);
+
+    // todo setup tooltip box with current info
+
+    sendMessage({lat:lat, lng:lon, zoom_level: zoom})
+}
+// skip init click handlers if in view state
+if(state !== 'view'){
+        // add listner to vectorGrid layer
+        vGrid.on('click', onVGridClick);
+        // add listner to map as fail over of vGrid
+        mymap.on('click',onMapClick);
+}
+
+
+
+
+
+
+
 // handler of the click event
 function onVGridClick(e) {
-    if(e.originalEvent.defaultPrevented)
-        return
+    if(e.originalEvent.defaultPrevented){return;}
 
     // prevent map click event
     e.originalEvent.preventDefault();
@@ -419,7 +466,6 @@ function onMapClick(e) {
 
 
 // add marker to map in the clicked position
-var marker = null;
 function setMarker(e, params) {
     if(marker){
         mymap.removeLayer(marker);
@@ -475,6 +521,10 @@ function sendMessage (params){
 
 // reset focus
 function cancel(){
+    // guardia per view state
+    if(state === 'view'){return;}
+
+
     if(marker){
         mymap.removeLayer(marker);
         marker = null;
@@ -502,7 +552,12 @@ function setLabel(params) {
         // set type
         content = params.type;
     }
-    label.innerHTML = cancelButton+content;
+    if(state === 'view'){
+        label.innerHTML = infoIcon+content;
+    }else{
+        label.innerHTML = cancelButton+content;
+    }
+
 }
 
 

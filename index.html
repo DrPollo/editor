@@ -35,8 +35,8 @@
         InputMap in embed in an iframe tag
     </p>
     <!--<iframe title="input a location" width="600" height="600" src="src/index.html?domain=https://inputmap.fldev.di.unito.it&lat=45.070312&lon=7.686856&zoom=12&contrast=false&mode=lite"></iframe>-->
-    <iframe title="input a location" width="600" height="600" src="src/index.html?domain=https://inputmap.firstlife.org&lat=45.070312&lon=7.686856&zoom=12&contrast=false&mode=lite"></iframe>
-    <!--<iframe title="input a location" width="600" height="600" src="src/index.html?domain=http://localhost:8080&lat=45.070312&lon=7.686856&zoom=12&contrast=false&mode=lite"></iframe>-->
+    <!--<iframe title="input a location" width="600" height="600" src="src/index.html?domain=https://inputmap.firstlife.org&lat=45.070312&lon=7.686856&zoom=12&contrast=false&mode=lite"></iframe>-->
+    <iframe title="input a location" width="600" height="600" src="src/index.html?domain=http://localhost:8080&lat=45.070312&lon=7.686856&zoom=12&contrast=false&mode=lite&state=view"></iframe>
     <p></p>
     <p>
     <h3>Returned object to the hosting window</h3>
@@ -94,8 +94,8 @@
 </body>
 <script>
 //    var iframeDomain = "https://inputmap.fldev.di.unito.it";
-    var iframeDomain = "https://inputmap.firstlife.org";
-//    var iframeDomain = "http://localhost:8080";
+//    var iframeDomain = "https://inputmap.firstlife.org";
+    var iframeDomain = "http://localhost:8080";
 
     window.addEventListener( "message",
         function (e) {
