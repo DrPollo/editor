@@ -1,24 +1,101 @@
-'use strict'
+'use strict';
+
+var currentEnv = "pt3";
+
+var env = {
+    "pt3":{
+        lat: 45.070312,
+        lon: 7.686856,
+        zoom: 13,
+        colors:{
+            primary:'blue',
+            secondary: 'green'
+        },
+        language: 'en'
+    },
+    "torino":{
+        lat: 45.070312,
+        lon: 7.686856,
+        zoom: 13,
+        colors:{
+            primary:'indingo',
+            secondary: 'indingo'
+        },
+        language: 'it'
+    },
+    "sandona":{
+        lat: 45.630373,
+        lon: 12.566082,
+        zoom: 13,
+        colors:{
+            primary:'blue',
+            secondary: 'lightblue'
+        },
+        language: 'it'
+    },
+    "southwark":{
+        lat: 51.483448,
+        lon: -0.082088,
+        zoom: 13,
+        colors:{
+            primary:'blue',
+            secondary: 'lightblue'
+        },
+        language: 'en'
+    }
+};
 
 
-// defaults
-var zoom = 13;
+
+// environment management
+var zoom = env[currentEnv].zoom;
 var locationZoom = 18;
-var lat = 45.070312;
-var lon = 7.686856;
-var baseColor = '#c32630';
+var lat = env[currentEnv].lat;
+var lon = env[currentEnv].lon;
+var colors = env[currentEnv].colors;
+
+var colorCode = {
+    florange: "#FC4A00",
+    orange : "#FF9800",
+    pink : "#E91E63",
+    deeporange : "#FF5722",
+    blue : "#2196f3",
+    lightblue : "#03a9f3",
+    deeppurle : "#673AB7",
+    cyan : "#00BCD4",
+    teal : "#009688",
+    light : "#03A9F4",
+    indingo : "#3F51B5",
+    green : "#4CAF50",
+    lightgreen : "#8BC34A",
+    yellow : "#FFEB3B",
+    amber : "#FFC107",
+    lime : "#CDDC39",
+    red : "#F44336",
+    wgnred : '#c32630',
+    gray : "#9E9E9E",
+    brown : "#795548",
+    bluegray : "#607D8B",
+    darkgray : "#666"
+};
+
+// color management
+var baseColor = colorCode[colors.primary];
+var secondColor = colorCode[colors.secondary];
+
+
 var mapOptions = {
     center: [lat,lon],
     zoom: zoom
 };
-var zoomControlPosition = 'bottomright';
+var zoomControlPosition = 'bottomleft';
 // var baselayer = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png';
 // var contrastlayer = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png';
 var baselayer = 'https://api.mapbox.com/styles/v1/drp0ll0/cj0tausco00tb2rt87i5c8pi0/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZHJwMGxsMCIsImEiOiI4bUpPVm9JIn0.NCRmAUzSfQ_fT3A86d9RvQ';
 var contrastlayer = 'https://api.mapbox.com/styles/v1/drp0ll0/cj167l5m800452rqsb9y2ijuq/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZHJwMGxsMCIsImEiOiI4bUpPVm9JIn0.NCRmAUzSfQ_fT3A86d9RvQ';
 
 // marker icon
-var htmlIcon = '<div class="pin"></div><div class="pulse"></div>';
+var htmlIcon = '<div style="background:'+baseColor+';" class="pin"></div><div class="pulse"></div>';
 var pinIcon = L.divIcon({className: 'pointer',html:htmlIcon, iconSize:[30,30],iconAnchor:[15,15]});
 
 // vectorGrid
@@ -101,7 +178,7 @@ if(params){
 var defIcon = '<button " title="'+tooltipLabel[lang]+'">&#x02713;</button>';
 var defaultLabel = defIcon+tooltipLabel[lang];
 label.innerHTML = defaultLabel;
-console.debug('current language',lang);
+// console.debug('current language',lang);
 var cancelButton = '<button onclick="cancel()" title="'+tooltipCancel[lang]+'">&#x2715;</button>';
 var infoIcon = '<i style="font-size:1em;position:absolute;left:9px;top:7px;" class="material-icons">location_on</i>';
 
@@ -112,8 +189,7 @@ var infoIcon = '<i style="font-size:1em;position:absolute;left:9px;top:7px;" cla
 // mode {lite = false | interactive = true}
 // lite mode: one click > event
 // interactive mode: first click > marker > click > event
-if(params.get('mode') === 'interactive')
-    mode = true;
+if(params.get('mode') === 'interactive'){ mode = true; }
 
 // definition of the map
 // map setup
@@ -271,12 +347,12 @@ var ordering = function (layers, zoom) {
 var featureStyle = function(properties,z) {
     var style = {
         weight: 1,
-        color: baseColor,
+        color: secondColor,
         opacity: 1,
         fill: true
     };
     if (properties.type === 'indoor') {
-        style.fillColor = baseColor;
+        style.fillColor = secondColor;
         style.fillOpacity = 0.5;
     }
     return style;
