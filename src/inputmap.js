@@ -105,7 +105,7 @@ var vectormapUrl = "https://tiles.firstlife.org/tile/{z}/{x}/{y}";
 
 // defaults
 var contrast = false;
-var domain = null;
+var domain = window.location.href;
 var mode = false;
 var params = null;
 
