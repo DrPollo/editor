@@ -1,8 +1,18 @@
 'use strict';
 
-var currentEnv = "pt3";
+var currentEnv = "dev";
 
 var env = {
+    "dev":{
+        lat: 45.070312,
+        lon: 7.686856,
+        zoom: 13,
+        colors:{
+            primary:'wgnred',
+            secondary: 'red'
+        },
+        language: 'en'
+    },
     "pt3":{
         lat: 45.070312,
         lon: 7.686856,
