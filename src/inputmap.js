@@ -159,9 +159,10 @@ if(params){
     contrast = params.get('contrast') === 'true' ;
     lang = params.get('lang') ? params.get('lang') : lang;
     // recover domain param (used for security reasons)
-    domain = params.get('domain');
-    // if domain does not exist trows a console error
-    if(!domain){
+    if(params.get('domain')){
+        domain = params.get('domain');
+    }else{
+        // if domain does not exist trows a console error
         console.error('missing mandatory param: "domain"');
     }
     // get required state if defined
