@@ -42,3 +42,6 @@
 .leaflet-control-zoom-in {
     margin-bottom: 8px;
 }
+.leaflet-control-zoom {
+    box-shadow: none !important;
+}
