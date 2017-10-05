@@ -169,18 +169,7 @@ if (!window.location.getParameter ) {
         return this.queryStringParams[key];
     };
 }
-console.log('debug getPrameter',window.location.getParameter('domain'));
-//
-// // check for IE
-// var ua = window.navigator.userAgent;
-// var msie = ua.indexOf("MSIE ");
-// // If Internet Explorer, return version number
-// if (msie > 0) {
-//     params = escape(location.search);
-// }else{
-//     params = (new URL(location)).searchParams;
-// }
-console.log('debug ie',(new URL(location)).searchParams);
+
 if(window.location.getParameter){
 // override location from get params
     lat = window.location.getParameter('lat') ? window.location.getParameter('lat') : lat;
