@@ -180,7 +180,7 @@ console.log('debug getPrameter',window.location.getParameter('domain'));
 // }else{
 //     params = (new URL(location)).searchParams;
 // }
-
+console.log('debug ie',(new URL(location)).searchParams);
 if(window.location.getParameter){
 // override location from get params
     lat = window.location.getParameter('lat') ? window.location.getParameter('lat') : lat;
