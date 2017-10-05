@@ -151,16 +151,25 @@ for(var i = 0; i < languages.length; i++){
 // check for IE
 var ua = window.navigator.userAgent;
 var msie = ua.indexOf("MSIE ");
+var urlParams;
+function parseUrlParams() {
+    var match,
+        pl     = /\+/g,  // Regex for replacing addition symbol with a space
+        search = /([^&=]+)=?([^&]*)/g,
+        decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+        query  = window.location.search.substring(1);
 
+    urlParams = {};
+    while (match = search.exec(query))
+        urlParams[decode(match[1])] = decode(match[2]);
+}
 // If Internet Explorer, return version number
 if (msie > 0) {
     params = escape(location.search);
 }else{
     params = (new URL(location)).searchParams;
 }
-
-
-
+console.log('debug url params',parseUrlParams());
 if(params){
 // override location from get params
     lat = params.get('lat') ? params.get('lat') : lat;
