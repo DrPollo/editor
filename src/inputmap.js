@@ -170,46 +170,34 @@ if (!window.location.getParameter ) {
     };
 }
 console.log('debug getPrameter',window.location.getParameter('domain'));
-var urlParams;
-function parseUrlParams() {
-    var match,
-        pl     = /\+/g,  // Regex for replacing addition symbol with a space
-        search = /([^&=]+)=?([^&]*)/g,
-        decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
-        query  = window.location.search.substring(1);
+//
+// // check for IE
+// var ua = window.navigator.userAgent;
+// var msie = ua.indexOf("MSIE ");
+// // If Internet Explorer, return version number
+// if (msie > 0) {
+//     params = escape(location.search);
+// }else{
+//     params = (new URL(location)).searchParams;
+// }
 
-    urlParams = {};
-    while (match = search.exec(query))
-        urlParams[decode(match[1])] = decode(match[2]);
-}
-console.log('debug url params',parseUrlParams());
-// check for IE
-var ua = window.navigator.userAgent;
-var msie = ua.indexOf("MSIE ");
-// If Internet Explorer, return version number
-if (msie > 0) {
-    params = escape(location.search);
-}else{
-    params = (new URL(location)).searchParams;
-}
-
-if(params){
+if(window.location.getParameter){
 // override location from get params
-    lat = params.get('lat') ? params.get('lat') : lat;
-    lon = params.get('lon') ? params.get('lon') : lon;
-    zoom = params.get('zoom') ? params.get('zoom') : zoom;
-    contrast = params.get('contrast') === 'true' ;
-    lang = params.get('lang') ? params.get('lang') : lang;
+    lat = window.location.getParameter('lat') ? window.location.getParameter('lat') : lat;
+    lon = window.location.getParameter('lon') ? window.location.getParameter('lon') : lon;
+    zoom = window.location.getParameter('zoom') ? window.location.getParameter('zoom') : zoom;
+    contrast = window.location.getParameter('contrast') === 'true' ;
+    lang = window.location.getParameter('lang') ? window.location.getParameter('lang') : lang;
     // recover domain param (used for security reasons)
-    if(params.get('domain')){
-        domain = params.get('domain');
+    if(window.location.getParameter('domain')){
+        domain = window.location.getParameter('domain');
     }else{
         // if domain does not exist trows a console error
         console.error('missing mandatory param: "domain"');
     }
     // get required state if defined
-    if(params.get('state')){
-        state = params.get('state');
+    if(window.location.getParameter('state')){
+        state = window.location.getParameter('state');
     }
 
 }else{
@@ -232,7 +220,7 @@ var infoIcon = '<i style="font-size:1em;position:absolute;left:9px;top:7px;" cla
 // mode {lite = false | interactive = true}
 // lite mode: one click > event
 // interactive mode: first click > marker > click > event
-if(params.get('mode') === 'interactive'){ mode = true; }
+if(window.location.getParameter('mode') === 'interactive'){ mode = true; }
 
 // definition of the map
 // map setup
@@ -248,7 +236,7 @@ var layers = {
 };
 
 
-console.log('select base layer:',contrast,contrast ? 'contrast': 'base', "test",params.get('contrast'));
+console.log('select base layer:',contrast,contrast ? 'contrast': 'base', "test",window.location.getParameter('contrast'));
 var mymap = L.map('inputmap',mapOptions);
 mymap.setView([lat, lon], zoom );
 layers[contrast ? 'contrast': 'base'].addTo(mymap);
