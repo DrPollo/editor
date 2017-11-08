@@ -268,6 +268,7 @@ var ordering = function (layers, zoom) {
         case 2:
             return [
                 "nazioni",
+                "nazioni_mondo",
                 "waterareas",
                 "waterways"
             ];
@@ -276,8 +277,11 @@ var ordering = function (layers, zoom) {
         case 4:
             return [
                 "nazioni",
+                "nazioni_mondo",
                 "regioni",
+                "regioni_europa",
                 "provincie",
+                "province_europa",
                 // "waterareas",
                 // "waterways"
             ];
@@ -286,8 +290,11 @@ var ordering = function (layers, zoom) {
         case 6:
             return [
                 "nazioni",
+                "nazioni_mondo",
                 "regioni",
+                "regioni_europa",
                 "provincie",
+                "province_europa",
                 // "landusages",
                 // "roads",
                 // "waterareas",
@@ -297,43 +304,60 @@ var ordering = function (layers, zoom) {
         case 8:
             return [
                 "nazioni",
+                "nazioni_mondo",
                 "regioni",
+                "regioni_europa",
                 "provincie",
+                "province_europa",
                 // "landusages",
                 // "roads",
                 // "waterareas",
                 // "waterways",
-                "comuni",];
+                "comuni",
+                "comune",
+                "comuni_italia"];
             break;
         case 9:
         case 10:
             return [
                 "nazioni",
+                "nazioni_mondo",
                 "regioni",
+                "regioni_europa",
                 "provincie",
+                "province_europa",
                 // "landusages",
                 // "roads",
                 // "waterareas",
                 // "waterways",
-                "comuni"];
+                "comuni",
+                "comune",
+                "comuni_italia"];
             break;
         case 11:
         case 12:
             return [
                 "provincie",
+                "province_europa",
                 // "landusages",
                 // "roads",
                 // "waterareas",
                 // "waterways",
-                "comuni"];
+                "comuni",
+                "comune",
+                "comuni_italia"];
             break;
         case 13:
         case 14:
             return [
                 "provincie",
+                "province_europa",
                 "quartieri",
                 // "landusages",
-                "comuni"];
+                "comuni",
+                "comune",
+                "comuni_italia"
+            ];
             break;
         case 15:
         case 16:
@@ -386,9 +410,14 @@ var featureStyle = function(properties,z) {
 };
 var vectorMapStyling = {
     nazioni: featureStyle,
+    nazioni_mondo: featureStyle,
     regioni: featureStyle,
+    regioni_europa: featureStyle,
     provincie: featureStyle,
+    province_europa: featureStyle,
+    comune: featureStyle,
     comuni: featureStyle,
+    comuni_italia: featureStyle,
     circoscrizioni: featureStyle,
     quartieri: featureStyle,
     city_block: featureStyle,
