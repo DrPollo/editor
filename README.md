@@ -156,5 +156,28 @@ For more information please refer to the *Browser compatibility* section at [pos
 1. [serve](https://www.npmjs.com/package/serve)
 
 
+### Environment
+Currently, InputMap can manage presets (environments). 
+In order to switch environment, the environment variable ``env`` must be set in ``src/inputmap.js``. 
+Up to now the following environment are defined:
+
+1. dev (default)
+2. pt3 (3rd prototype of WeGovNow)
+3. torino (WeGovNow instance)
+3. southwark (WeGovNow instance)
+3. sandona (WeGovNow instance)
+
+es.
+```
+cd ./inputmap-pt3
+git reset --hard
+git checkout master
+git pull
+nano src/inputmap.js
+...
+var env = "pt3"; // to be edited
+...
+```
+
 ### Licence
 MIT
